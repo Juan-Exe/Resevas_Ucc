@@ -1,0 +1,544 @@
+*{
+    box-sizing: border-box;
+}
+
+body{
+    margin: 0;
+    padding: 0;
+    font-family: 'Lato', sans-serif;
+}
+
+.res-cont-cont{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.res-lkn-cont{
+    width: 15%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.res-lkn-cont img{
+    width: 50px;
+    height: auto;
+    margin-top: 20px;
+    background: black;
+}
+
+.res-prof-cont{
+    display: flex;
+    flex-direction: row;
+}
+
+.res-prof-lab{
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    margin-top: 20px;
+}
+
+.res-lkn-cont h2{
+    font-weight: 500;
+    font-size: 25px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    text-transform: capitalize;
+}
+
+.res-cont-cont a{
+    text-decoration: none;
+    color: black;
+    font-weight: 500;
+    line-height: 2;
+    font-size: 1em;
+    font-size: 18px;
+    border-bottom: #727272 1px solid; 
+    padding-left: 10px;
+    margin-left: 5px;
+}
+
+.res-cont-cont a:hover{
+        background: #E7F5FF;
+        transition: 0.3s;
+}
+
+.res-tit-form-cont{
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.res-tit-form-cont h1, .res-tit-form-cont h2, .res-tit-form-cont h3{
+    color: #006FBF;
+    text-transform: capitalize;
+}
+
+.dynamic-form label {
+    color: #006FBF;
+}
+
+.res-cont-cont label{
+    text-transform: capitalize;
+    font-weight: 500;
+}
+
+/* New styles for custom select */
+.res-form-cont {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between "Selecciona el piso" and the arrow */
+}
+
+.custom-select-container {
+    position: relative;
+}
+
+.custom-select-trigger {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.custom-select-trigger img {
+    width: 30px; 
+    height: auto;
+    transition: transform 0.3s ease-in-out; /* Smooth transition */
+    transform: rotate(180deg); /* Start pointing up */
+}
+
+.custom-select-trigger.open img {
+    transform: rotate(0deg); /* Point down when open */
+}
+
+.custom-options {
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    background-color: white;
+    border: 1px solid #727272;
+    border-radius: 5px;
+    z-index: 10;
+    text-align: center;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+.custom-options.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.custom-option-header {
+    padding: 10px;
+    font-weight: 500;
+    border-bottom: 1px solid #727272;
+}
+
+.custom-option {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.custom-option:last-child {
+    border-bottom: none;
+}
+
+.custom-option:hover {
+    color: #006FBF;
+}
+
+#dynamic-form-container > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    margin-bottom: 10px;
+    line-height: 1.5;
+    border-bottom: 1px solid #E0E0E0;
+}
+
+#dynamic-form-container label {
+    font-weight: 510;
+    padding-right: 15px; /* Add some space between label and control */
+}
+
+#dynamic-form-container input,
+#dynamic-form-container select,
+#dynamic-form-container p {
+    border: 1px solid #727272;
+    width: 50%; 
+    padding: 8px;
+    margin: 0; /* Remove margin-top and any default p margin */
+    text-align: right; /* Align text to the right for a cleaner look */
+}
+
+#dynamic-form-container p {
+    border: none; /* Paragraphs for capacity/location shouldn't have a border */
+}
+
+#no-floor-selected {
+    color: #727272;
+    margin-left: 50px;
+    font-style: italic;
+    width: 100%;
+}
+
+.res-tit-form-cont{
+    width: 38%;
+}
+
+
+.res-fech-hr-cont{
+    display: flex;
+    flex-direction: column;
+    margin-top: 50px;
+    width: 18%; /* CAMBIO: Contenedor principal más estrecho */
+}
+
+.res-lab-svg {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.res-lab-svg label{
+    font-weight: 600;
+}
+.res-lab-svg img {
+    width: 30px;
+    height: auto;
+    margin-left: 5px;
+}
+
+.res-fech {
+    margin-left: 10px;
+    width: 100%;
+    border: #727272 1px solid;
+    border-radius: 5px;
+    text-align: center;
+    position: relative; 
+}
+
+.res-fech-h3-svg{
+    display: flex;
+    align-items: center;
+    justify-content: center; /* CAMBIO: Centrado para juntar el texto y la flecha */
+    gap: 5px; /* CAMBIO: Espacio de 5px entre el mes y la flecha */
+    cursor: pointer;
+    padding: 8px 5px;
+    position: relative; /* CAMBIO: Posición relativa para el menú desplegable */
+    border-bottom: #727272 1px solid; /* CAMBIO: Borde inferior añadido */
+}
+
+/* --- Nuevos estilos para el selector de fecha --- */
+
+.date-display {
+    /* Este contenedor ahora solo tiene el nombre del mes */
+    line-height: 1.2;
+}
+
+#month-name {
+    font-size: 1.2em; /* Un poco más grande para destacar */
+    font-weight: 700;
+}
+
+#day-details {
+    /* CAMBIO: Estilo para el día seleccionado, ahora separado */
+    font-size: 1em;
+    font-weight: 700;
+    color: #333;
+    padding: 8px 0;
+    border-top: 1px solid #E0E0E0;
+    border-bottom: 1px solid #E0E0E0;
+}
+
+.res-fech-h3-svg img {
+    width: 25px; /* Un poco más pequeña la flecha */
+    height: auto;
+    transition: transform 0.3s ease-in-out;
+    transform: rotate(180deg); /* La flecha empieza apuntando hacia arriba */
+}
+
+.res-fech-h3-svg img.open {
+    transform: rotate(0deg); /* La flecha apunta hacia abajo cuando está abierto */
+}
+
+#month-options-popup {
+    /* CAMBIO: Posicionamiento del menú de meses */
+    position: absolute;
+    top: 100%; /* Aparece justo debajo del encabezado */
+    left: 0;
+    right: 0;
+    width: 100%; 
+    transform: none; 
+    border-top: 1px solid #727272;
+    border-radius: 0 0 5px 5px;
+    z-index: 11; /* Ensure it's on top of other elements */
+    /* Hereda los estilos de .custom-options para la visibilidad */
+}
+
+.res-fech-day {
+    display: flex;
+    overflow-x: auto; /* Activamos el scroll horizontal */
+    padding: 8px 4px;
+    /* Ocultamos la barra de scroll para un diseño más limpio */
+    -ms-overflow-style: none;  /* IE y Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.res-fech-day::-webkit-scrollbar {
+    display: none; /* Chrome, Safari y Opera */
+}
+
+.day-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    padding: 5px;
+    margin: 0 4px;
+    cursor: pointer;
+    font-family: 'Lato', sans-serif;
+    min-width: 55px; 
+    transition: background-color 0.3s, border-color 0.3s;
+    color: #333;
+}
+
+.day-button:hover {
+    background-color: #f0f0f0;
+}
+
+.day-button span:first-child {
+    font-weight: 500;
+    font-size: 0.85em;
+    text-transform: uppercase;
+}
+
+.day-button span:last-child {
+    font-weight: 700;
+    font-size: 1.2em;
+    margin-top: 2px;
+}
+
+.day-button.selected {
+    border-color: #006FBF;
+    background-color: #E7F5FF;
+    color: #006FBF;
+}
+
+.day-button:disabled {
+    color: #B0B0B0;
+    background-color: #F5F5F5;
+    cursor: not-allowed;
+    border-color: #E0E0E0;
+}
+
+.day-button:disabled:hover {
+    background-color: #F5F5F5;
+}
+
+/* --- DYNAMIC FORM STYLES --- */
+
+.dynamic-form > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    margin-bottom: 10px;
+    line-height: 1.5;
+    border-bottom: 1px solid #E0E0E0;
+}
+
+.dynamic-form label {
+    font-weight: 510;
+    padding-right: 15px;
+}
+
+.dynamic-form p {
+    margin: 0;
+    text-align: right;
+}
+
+.dynamic-custom-select {
+    position: relative;
+    width: 50%;
+    border: 1px solid #727272;
+    border-radius: 5px;
+    text-align: right;
+}
+
+.dynamic-select-trigger {
+    cursor: pointer;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 8px;
+}
+
+.dynamic-trigger-text {
+    margin-right: 5px;
+}
+
+.dynamic-select-trigger img {
+    width: 20px;
+    height: auto;
+    transition: transform 0.3s ease-in-out;
+    transform: rotate(180deg);
+}
+
+.dynamic-custom-select.open .dynamic-select-trigger img {
+    transform: rotate(0deg);
+}
+
+.dynamic-custom-select.open {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom: none; /* Hide bottom border when open to unify */
+}
+
+.dynamic-select-options {
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    background-color: white;
+    border: 1px solid #727272;
+    /* border-top: none; <-- REMOVED to show separator */
+    border-radius: 0 0 5px 5px;
+    z-index: 10;
+    left: -1.2px; /* Align with parent border */
+    width: calc(100% + 2px); /* Match parent width including borders */
+    text-align: right; /* Align text to the right */
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+.dynamic-custom-select.open .dynamic-select-options {
+    opacity: 1;
+    visibility: visible;
+}
+
+.dynamic-select-option {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.dynamic-select-option:hover {
+    background-color: #E7F5FF;
+}
+
+.hidden-row {
+    display: none !important;
+}
+
+.desc-esp {
+    text-align: center; /* Center the text inside */
+    margin: 15px auto 0; /* Center the block element */
+    padding: 0;
+    width: 90%; /* Slightly reduce width */
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    max-height: 0;
+    overflow: hidden;
+}
+
+.desc-esp.show {
+    opacity: 1;
+    max-height: 1000px; /* Large enough to not clip content */
+}
+
+.hour-cont {
+    margin-top: 20px;
+}
+
+.hour-cont label {
+    font-weight: 600;
+}
+
+.btn-cont {
+    margin-left: 10px;
+    display: flex;
+    width: 100%;
+    gap: 10px;
+    flex-flow: row wrap;
+    margin-top: 10px;
+}
+
+.btn-cont button {
+    border: 1px solid #727272;
+    background: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    width: calc(50% - 5px);
+    font-weight: 500;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.76em;
+}
+
+.btn-cont button.selected {
+    background-color: #006FBF;
+    color: white;
+}
+
+.evnt-mot{
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.evnt-mot label {
+    font-weight: 600;
+    margin-bottom: 10px;
+} 
+
+.evnt-mot textarea {
+    border: 1px solid #727272;
+    border-radius: 5px;
+    padding: 8px;
+    width: 100%;
+    resize: vertical; 
+    min-height: 80px; 
+    font-family: 'Lato', sans-serif;
+}
+
+.evnt-mot label:last-child {
+    margin-top: 10px;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.btn-ctn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+.btn-ctn.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.res-btn {
+    margin-top: 30px;
+    padding: 15px 20px;
+    background-color: #006FBF;
+    color: white;
+    border: none;
+    width: 20%;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    text-transform: capitalize;
+    transition: background-color 0.3s ease-in-out;
+}

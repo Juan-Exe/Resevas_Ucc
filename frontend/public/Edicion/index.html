@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edición de Reserva UCC</title>
+    <link rel="stylesheet" href="E-styles/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
+        rel="stylesheet">
+
+<body>
+    <main>
+        <div class="res-cont-cont">
+            <div class="res-lkn-cont">
+                <div class="res-prof-cont">
+                    <div class="res-prof-img">
+                        <img src="../I-img/Yo.jpg" alt="yo">
+                    </div>
+                    <div class="res-prof-lab">
+                        <label for="">Arrieta Herrera, Juan</label>
+                        <label for="">juan.arrietah</label>
+                    </div>
+                </div>
+
+                <h2>Sistema de reservas ucc.</h2>
+                <a href="../index.html">Reservas</a>
+                <a href="../Gestion/index.html">Gestion</a>
+            </div>
+            <div class="res-tit-form-cont">
+                <div class="res-tit-cont">
+                    <h1>Editar Reserva</h1>
+                </div>
+                <div class="res-form-cont">
+                    <label for="">Selecciona el piso</label>
+                    <div class="custom-select-container">
+                        <div class="custom-select-trigger">
+                            <img src="../I-img/Assets svg/Down arrow.svg" alt="arrow">
+                        </div>
+                        <div class="custom-options">
+                            <div class="custom-option-header">Piso</div>
+                            <div class="custom-option" data-value="1">1</div>
+                            <div class="custom-option" data-value="2">2</div>
+                            <div class="custom-option" data-value="3">3</div>
+                            <div class="custom-option" data-value="4">4</div>
+                            <div class="custom-option" data-value="5">5</div>
+                            <div class="custom-option" data-value="6">6</div>
+                        </div>
+                    </div>
+                </div>
+                <form action="">
+                    <h2>Datos del espacio reservado</h2>
+                    <div id="dynamic-form-container"><label id="no-floor-selected">Cargando datos de la reserva...</label></div>
+                </form>
+                <p class="desc-esp"></p>
+                <div class="btn-ctn">
+                    <button class="res-btn" id="guardar-btn">Guardar Cambios</button>
+                </div>
+            </div>
+
+            <div class="res-fech-hr-cont">
+                <div class="res-lab-svg">
+                    <label for="">Fecha a reserva</label>
+                    <img src="../I-img/Assets svg/Down arrow.svg" alt="">
+                </div>
+                <div class="res-fech">
+                    <div class="res-fech-h3-svg">
+                        <div class="date-display">
+                            <span id="month-name">Octubre</span>
+                        </div>
+                        <img src="../I-img/Assets svg/Down arrow.svg" alt="arrow">
+                        <div id="month-options-popup" class="custom-options">
+                            <!-- Opciones de mes se generan con JS -->
+                        </div>
+                    </div>
+                    <div class="res-fech-day">
+                        <!-- Días se generan con JS -->
+                    </div>
+                </div>
+                <div class="hour-cont">
+                    <label>Hora a reservar.</label>
+                </div>
+                <div class="btn-cont">
+                    <button>6:00am a 9:00am</button>
+                    <button>9:00am a 12:00pm</button>
+                    <button>12:00pm a 3:00pm</button>
+                    <button>3:00pm a 6:00pm</button>
+                    <button>6:00pm a 9:00pm</button>
+                </div>
+                <div class="evnt-mot">
+                    <label for="">Motivo de la reserva</label>
+                    <textarea name="" id="reason-textarea" cols="30" rows="10"
+                        placeholder="Escriba el motivo de la reserva..."></textarea>
+                    <label for="">max 500 caracteres.*</label>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="edicion.js"></script>
+</body>
+
+</html>
