@@ -18,10 +18,21 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.success && data.reservas) {
                 reservasContainer.innerHTML = '<h1>Gestión de reservas</h1>'; // Limpia el contenedor y añade el título
 
-                if (data.reservas.length === 0) {
+                // Obtener la fecha actual (solo la parte de la fecha, sin hora)
+                const hoy = new Date();
+                hoy.setHours(0, 0, 0, 0);
+
+                // Filtrar solo las reservas futuras (desde hoy en adelante)
+                const reservasFuturas = data.reservas.filter(reserva => {
+                    const fechaReserva = new Date(reserva.fecha);
+                    fechaReserva.setHours(0, 0, 0, 0);
+                    return fechaReserva >= hoy;
+                });
+
+                if (reservasFuturas.length === 0) {
                     reservasContainer.innerHTML += '<p>No hay reservas para mostrar.</p>';
                 } else {
-                    data.reservas.forEach(reserva => {
+                    reservasFuturas.forEach(reserva => {
                         // Lógica para el piso y el bloque
                         let pisoBloqueLabel = `Piso: ${reserva.piso}`;
                         if (reserva.bloque) {

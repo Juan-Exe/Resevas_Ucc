@@ -1,11 +1,56 @@
 const express = require('express');
 const mysql = require('mysql2');
 const path = require('path');
+const bcrypt = require('bcrypt');
+const session = require('express-session');
+const multer = require('multer');
+const fs = require('fs');
 
 const app = express();
 const port = 3000;
 
 app.use(express.json());
+
+// Configurar sesiones
+app.use(session({
+    secret: 'reservas-ucc-secret-key-2025',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24 * 7 // 7 días
+    }
+}));
+
+// Configurar Multer para subir imágenes
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const uploadPath = path.join(__dirname, '..', 'frontend', 'public', 'I-img', 'uploads');
+        if (!fs.existsSync(uploadPath)) {
+            fs.mkdirSync(uploadPath, { recursive: true });
+        }
+        cb(null, uploadPath);
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, uniqueSuffix + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+    fileFilter: (req, file, cb) => {
+        const allowedTypes = /jpeg|jpg|png|gif/;
+        const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+        const mimetype = allowedTypes.test(file.mimetype);
+        
+        if (mimetype && extname) {
+            return cb(null, true);
+        } else {
+            cb(new Error('Solo se permiten imágenes (jpeg, jpg, png, gif)'));
+        }
+    }
+});
 
 // Middleware to log all incoming requests for debugging
 app.use((req, res, next) => {
@@ -30,6 +75,277 @@ db.connect(err => {
     }
     console.log("🟢 Conectado a la base de datos reservas_ucc");
 });
+
+// ============================================
+// RUTAS DE AUTENTICACIÓN
+// ============================================
+
+// Endpoint para REGISTRO de usuarios
+app.post('/api/registro', upload.single('imagen_perfil'), async (req, res) => {
+    try {
+        const { nombre_completo, nombre_usuario, email, password, rol } = req.body;
+
+        // Validar que el correo sea institucional
+        if (!email.endsWith('@ucc.edu.co')) {
+            return res.status(400).json({ success: false, message: 'Debe usar su correo institucional (@ucc.edu.co)' });
+        }
+
+        // Validar que el rol sea válido
+        if (!rol || (rol !== 'Estudiante' && rol !== 'Profesor')) {
+            return res.status(400).json({ success: false, message: 'Debe seleccionar un rol válido.' });
+        }
+
+        // Verificar si el usuario o correo ya existen
+        const checkQuery = 'SELECT id FROM usuarios WHERE correo_institucional = ? OR nombre_usuario = ?';
+        db.query(checkQuery, [email, nombre_usuario], async (err, results) => {
+            if (err) {
+                console.error('🔴 Error al verificar usuario:', err);
+                return res.status(500).json({ success: false, message: 'Error al verificar el usuario.' });
+            }
+
+            if (results.length > 0) {
+                return res.status(409).json({ success: false, message: 'El correo o nombre de usuario ya están registrados.' });
+            }
+
+            // Hashear la contraseña
+            const hashedPassword = await bcrypt.hash(password, 10);
+
+            // Nombre de la imagen (si se subió una)
+            const imagenPerfil = req.file ? req.file.filename : 'default-avatar.svg';
+
+            // Insertar el nuevo usuario con su rol
+            const insertQuery = 'INSERT INTO usuarios (nombre_completo, nombre_usuario, correo_institucional, rol, password, imagen_perfil) VALUES (?, ?, ?, ?, ?, ?)';
+            db.query(insertQuery, [nombre_completo, nombre_usuario, email, rol, hashedPassword, imagenPerfil], (err, result) => {
+                if (err) {
+                    console.error('🔴 Error al registrar usuario:', err);
+                    return res.status(500).json({ success: false, message: 'Error al crear la cuenta.' });
+                }
+
+                console.log('🟢 Usuario registrado con éxito. ID:', result.insertId);
+                res.status(201).json({
+                    success: true,
+                    message: 'Usuario registrado exitosamente.',
+                    usuario: {
+                        id: result.insertId,
+                        nombre_completo,
+                        nombre_usuario,
+                        email,
+                        rol,
+                        imagen_perfil: imagenPerfil
+                    }
+                });
+            });
+        });
+    } catch (error) {
+        console.error('🔴 Error en el registro:', error);
+        res.status(500).json({ success: false, message: 'Error del servidor.' });
+    }
+});
+
+// Endpoint para LOGIN de usuarios
+app.post('/api/login', async (req, res) => {
+    try {
+        const { email, password, remember } = req.body;
+
+        // Buscar el usuario por correo
+        const query = 'SELECT * FROM usuarios WHERE correo_institucional = ? AND activo = 1';
+        db.query(query, [email], async (err, results) => {
+            if (err) {
+                console.error('🔴 Error al buscar usuario:', err);
+                return res.status(500).json({ success: false, message: 'Error del servidor.' });
+            }
+
+            if (results.length === 0) {
+                return res.status(401).json({ success: false, message: 'Correo o contraseña incorrectos.' });
+            }
+
+            const usuario = results[0];
+
+            // Verificar la contraseña
+            const passwordMatch = await bcrypt.compare(password, usuario.password);
+
+            if (!passwordMatch) {
+                return res.status(401).json({ success: false, message: 'Correo o contraseña incorrectos.' });
+            }
+
+            // Actualizar último acceso
+            db.query('UPDATE usuarios SET ultimo_acceso = NOW() WHERE id = ?', [usuario.id]);
+
+            // Guardar en sesión
+            req.session.userId = usuario.id;
+            if (remember) {
+                req.session.cookie.maxAge = 1000 * 60 * 60 * 24 * 30; // 30 días
+            }
+
+            console.log('🟢 Login exitoso para:', usuario.nombre_usuario);
+            res.json({
+                success: true,
+                message: 'Login exitoso.',
+                usuario: {
+                    id: usuario.id,
+                    nombre_completo: usuario.nombre_completo,
+                    nombre_usuario: usuario.nombre_usuario,
+                    email: usuario.correo_institucional,
+                    rol: usuario.rol,
+                    imagen_perfil: usuario.imagen_perfil
+                }
+            });
+        });
+    } catch (error) {
+        console.error('🔴 Error en el login:', error);
+        res.status(500).json({ success: false, message: 'Error del servidor.' });
+    }
+});
+
+// Endpoint para LOGOUT
+app.post('/api/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.status(500).json({ success: false, message: 'Error al cerrar sesión.' });
+        }
+        res.json({ success: true, message: 'Sesión cerrada exitosamente.' });
+    });
+});
+
+// Endpoint para obtener datos del usuario actual
+app.get('/api/usuario-actual', (req, res) => {
+    if (!req.session.userId) {
+        return res.status(401).json({ success: false, message: 'No hay sesión activa.' });
+    }
+
+    const query = 'SELECT id, nombre_completo, nombre_usuario, correo_institucional, rol, imagen_perfil FROM usuarios WHERE id = ?';
+    db.query(query, [req.session.userId], (err, results) => {
+        if (err || results.length === 0) {
+            return res.status(404).json({ success: false, message: 'Usuario no encontrado.' });
+        }
+
+        const usuario = results[0];
+        res.json({
+            success: true,
+            usuario: {
+                id: usuario.id,
+                nombre_completo: usuario.nombre_completo,
+                nombre_usuario: usuario.nombre_usuario,
+                email: usuario.correo_institucional,
+                rol: usuario.rol,
+                imagen_perfil: usuario.imagen_perfil
+            }
+        });
+    });
+});
+
+// Endpoint para actualizar perfil de usuario
+app.put('/api/actualizar-perfil', upload.single('imagen_perfil'), async (req, res) => {
+    try {
+        const { nombre_completo, nombre_usuario, password_actual, password_nueva } = req.body;
+        
+        // Obtener el usuario de localStorage (desde el cliente)
+        // En un sistema real, usaríamos req.session.userId
+        const usuarioStr = req.headers['user-data'];
+        if (!usuarioStr) {
+            return res.status(401).json({ success: false, message: 'No autenticado.' });
+        }
+
+        const usuarioData = JSON.parse(usuarioStr);
+        const userId = usuarioData.id;
+
+        // Verificar que el usuario exista
+        const checkQuery = 'SELECT * FROM usuarios WHERE id = ?';
+        db.query(checkQuery, [userId], async (err, results) => {
+            if (err || results.length === 0) {
+                return res.status(404).json({ success: false, message: 'Usuario no encontrado.' });
+            }
+
+            const usuario = results[0];
+
+            // Si se quiere cambiar la contraseña, verificar la actual
+            if (password_actual && password_nueva) {
+                const passwordMatch = await bcrypt.compare(password_actual, usuario.password);
+                if (!passwordMatch) {
+                    return res.status(401).json({ success: false, message: 'La contraseña actual es incorrecta.' });
+                }
+            }
+
+            // Verificar que el nombre de usuario no esté en uso por otro usuario
+            if (nombre_usuario !== usuario.nombre_usuario) {
+                const checkUsuario = 'SELECT id FROM usuarios WHERE nombre_usuario = ? AND id != ?';
+                const checkResult = await new Promise((resolve, reject) => {
+                    db.query(checkUsuario, [nombre_usuario, userId], (err, results) => {
+                        if (err) reject(err);
+                        else resolve(results);
+                    });
+                });
+
+                if (checkResult.length > 0) {
+                    return res.status(409).json({ success: false, message: 'El nombre de usuario ya está en uso.' });
+                }
+            }
+
+            // Preparar datos para actualizar
+            let updateData = {
+                nombre_completo,
+                nombre_usuario
+            };
+
+            // Si hay nueva contraseña, hashearla
+            if (password_nueva) {
+                updateData.password = await bcrypt.hash(password_nueva, 10);
+            }
+
+            // Si hay nueva imagen
+            if (req.file) {
+                updateData.imagen_perfil = req.file.filename;
+                
+                // Eliminar imagen anterior si no es la default
+                if (usuario.imagen_perfil && usuario.imagen_perfil !== 'default-avatar.svg' && usuario.imagen_perfil !== 'default-avatar.jpg') {
+                    const fs = require('fs');
+                    const oldImagePath = path.join(__dirname, '..', 'frontend', 'public', 'I-img', 'uploads', usuario.imagen_perfil);
+                    if (fs.existsSync(oldImagePath)) {
+                        fs.unlinkSync(oldImagePath);
+                    }
+                }
+            }
+
+            // Construir query de actualización
+            const fields = Object.keys(updateData);
+            const values = Object.values(updateData);
+            const setClause = fields.map(field => `${field} = ?`).join(', ');
+            
+            const updateQuery = `UPDATE usuarios SET ${setClause} WHERE id = ?`;
+            values.push(userId);
+
+            db.query(updateQuery, values, (err, result) => {
+                if (err) {
+                    console.error('🔴 Error al actualizar perfil:', err);
+                    return res.status(500).json({ success: false, message: 'Error al actualizar el perfil.' });
+                }
+
+                console.log('🟢 Perfil actualizado con éxito. ID:', userId);
+                
+                // Retornar datos actualizados
+                res.json({
+                    success: true,
+                    message: 'Perfil actualizado exitosamente.',
+                    usuario: {
+                        id: userId,
+                        nombre_completo,
+                        nombre_usuario,
+                        email: usuario.correo_institucional,
+                        rol: usuario.rol,
+                        imagen_perfil: updateData.imagen_perfil || usuario.imagen_perfil
+                    }
+                });
+            });
+        });
+    } catch (error) {
+        console.error('🔴 Error en actualización de perfil:', error);
+        res.status(500).json({ success: false, message: 'Error del servidor.' });
+    }
+});
+
+// ============================================
+// RUTAS DE RESERVAS
+// ============================================
 
 // Endpoint para OBTENER las horas reservadas para un espacio y fecha
 app.get('/api/reservas', (req, res) => {
@@ -186,10 +502,12 @@ app.put('/api/reservas/:id', (req, res) => {
     });
 });
 
+// Ruta principal - Redirige al login
 app.get('/', (req, res) => {
-  res.send('¡Servidor de Express funcionando!');
+    res.redirect('/Login/index.html');
 });
 
 app.listen(port, () => {
   console.log(`Servidor escuchando en http://localhost:${port}`);
+  console.log(`🔐 Página de inicio: http://localhost:${port}/ (Redirige a Login)`);
 });

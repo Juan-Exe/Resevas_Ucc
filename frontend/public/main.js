@@ -618,7 +618,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const MONTH_NAMES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
     const DAY_NAMES_SHORT = ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"];
 
-    const userToday = new Date('2025-10-16T12:00:00');
+    // Obtener la fecha actual del sistema
+    const userToday = new Date();
+    userToday.setHours(12, 0, 0, 0); // Establecer a mediodía para evitar problemas de zona horaria
     let selectedDate = new Date(userToday);
     formState.date = selectedDate;
 
@@ -629,9 +631,23 @@ document.addEventListener('DOMContentLoaded', () => {
     function populateDaySlider(baseDate) {
         if(!daySlider) return;
         daySlider.innerHTML = '';
-        for (let i = 0; i < 30; i++) {
-            const date = new Date(baseDate);
-            date.setDate(baseDate.getDate() + i);
+        
+        // Obtener el mes y año de la fecha base
+        const targetMonth = baseDate.getMonth();
+        const targetYear = baseDate.getFullYear();
+        
+        // Calcular el último día del mes
+        const lastDayOfMonth = new Date(targetYear, targetMonth + 1, 0).getDate();
+        
+        // Si estamos en el mes actual, empezar desde hoy, si no desde el día 1
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const isCurrentMonth = (targetMonth === today.getMonth() && targetYear === today.getFullYear());
+        const startDay = isCurrentMonth ? baseDate.getDate() : 1;
+        
+        // Crear botones solo para los días del mes seleccionado
+        for (let day = startDay; day <= lastDayOfMonth; day++) {
+            const date = new Date(targetYear, targetMonth, day);
 
             const dayButton = document.createElement('button');
             dayButton.classList.add('day-button');
@@ -771,5 +787,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
         });
+    }
+
+    // Abrir automáticamente el select de pisos al cargar la página
+    if (selectTrigger && options) {
+        setTimeout(() => {
+            selectTrigger.classList.add('open');
+            options.classList.add('show');
+            
+            // Cerrar automáticamente después de 3 segundos si no se ha seleccionado nada
+            setTimeout(() => {
+                if (!formState.floor) {
+                    selectTrigger.classList.remove('open');
+                    options.classList.remove('show');
+                }
+            }, 3000);
+        }, 500); // Esperar 500ms después de cargar la página para dar efecto de animación
     }
 });

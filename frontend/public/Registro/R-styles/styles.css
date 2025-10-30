@@ -1,0 +1,221 @@
+/* Estilos para Registro - Estética Minimalista Reservas UCC */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Lato', sans-serif;
+    background: #F5F5F5;
+}
+
+.registro-container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.registro-box {
+    background: white;
+    border: 1px solid #E0E0E0;
+    border-radius: 5px;
+    padding: 50px 60px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.registro-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.registro-header h1 {
+    font-size: 26px;
+    font-weight: 500;
+    color: #006FBF;
+    margin: 0 0 5px 0;
+    text-transform: capitalize;
+}
+
+.registro-header h2 {
+    font-size: 20px;
+    font-weight: 500;
+    color: #333;
+    margin: 0;
+}
+
+.registro-header .rol-seleccionado {
+    font-size: 14px;
+    color: #006FBF;
+    margin: 10px 0 0 0;
+    font-weight: 600;
+    background: #E6F4FB;
+    padding: 8px 16px;
+    border-radius: 20px;
+    display: inline-block;
+}
+
+.registro-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    text-transform: capitalize;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"] {
+    padding: 12px;
+    border: 1px solid #727272;
+    border-radius: 5px;
+    font-size: 14px;
+    font-family: 'Lato', sans-serif;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group input[type="password"]:focus {
+    outline: none;
+    border-color: #006FBF;
+}
+
+.form-group input[type="file"] {
+    padding: 10px;
+    border: 1px solid #727272;
+    border-radius: 5px;
+    font-size: 14px;
+    font-family: 'Lato', sans-serif;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input[type="file"]:focus {
+    outline: none;
+    border-color: #006FBF;
+}
+
+.preview-container {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.preview-container img {
+    max-width: 120px;
+    max-height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #006FBF;
+}
+
+.error-message,
+.success-message {
+    display: none;
+    padding: 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.error-message {
+    background-color: #FFE6E6;
+    border: 1px solid #FF9999;
+    color: #CC0000;
+}
+
+.success-message {
+    background-color: #E6F7E6;
+    border: 1px solid #99CC99;
+    color: #006600;
+}
+
+.error-message.show,
+.success-message.show {
+    display: block;
+}
+
+.btn-registro {
+    padding: 15px;
+    background-color: #006FBF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-family: 'Lato', sans-serif;
+    text-transform: capitalize;
+    margin-top: 10px;
+}
+
+.btn-registro:hover {
+    background-color: #005A9E;
+}
+
+.btn-registro:active {
+    background-color: #004A82;
+}
+
+.btn-registro:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: #727272;
+}
+
+.registro-footer {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #E0E0E0;
+}
+
+.registro-footer p {
+    font-size: 14px;
+    color: #333;
+    margin: 0;
+    font-weight: 500;
+}
+
+.registro-footer a {
+    color: #006FBF;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.registro-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .registro-box {
+        padding: 40px 30px;
+    }
+
+    .registro-header h1 {
+        font-size: 22px;
+    }
+
+    .registro-header h2 {
+        font-size: 18px;
+    }
+}

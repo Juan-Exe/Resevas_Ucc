@@ -1,0 +1,385 @@
+/* Estilos para Perfil - Estética Minimalista Reservas UCC */
+
+/* Reutilizar estilos base del sistema */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Lato', sans-serif;
+}
+
+/* Mantener estructura del sidebar igual que otras páginas */
+.res-cont-cont {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.res-lkn-cont {
+    width: 15%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.res-lkn-cont img {
+    width: 50px;
+    height: auto;
+    margin-top: 20px;
+}
+
+.res-prof-cont {
+    display: flex;
+    flex-direction: row;
+}
+
+.res-prof-img img {
+    width: 50px;
+    height: auto;
+}
+
+.res-prof-lab {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    margin-top: 20px;
+}
+
+.res-lkn-cont h2 {
+    font-weight: 500;
+    font-size: 25px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    text-transform: capitalize;
+}
+
+.res-cont-cont a {
+    text-decoration: none;
+    color: black;
+    font-weight: 500;
+    line-height: 2;
+    font-size: 1em;
+    font-size: 18px;
+    border-bottom: #727272 1px solid;
+    padding-left: 10px;
+    margin-left: 5px;
+}
+
+.res-cont-cont a:hover {
+    background: #E7F5FF;
+    transition: 0.3s;
+}
+
+.res-cont-cont label {
+    text-transform: capitalize;
+    font-weight: 500;
+}
+
+/* Contenedor principal del perfil */
+.perfil-container {
+    width: 50%;
+    margin-top: 20px;
+    padding: 20px;
+}
+
+.perfil-container h1 {
+    color: #006FBF;
+    font-size: 28px;
+    font-weight: 500;
+    margin: 0 0 30px 0;
+    text-transform: capitalize;
+}
+
+/* Vista de perfil */
+.perfil-vista {
+    background: white;
+    border: 1px solid #727272;
+    border-radius: 5px;
+    padding: 30px;
+}
+
+.perfil-header {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #727272;
+}
+
+.perfil-img-grande {
+    flex-shrink: 0;
+}
+
+.perfil-img-grande img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #006FBF;
+}
+
+.perfil-info {
+    flex-grow: 1;
+}
+
+.perfil-info h2 {
+    color: #333;
+    font-size: 24px;
+    font-weight: 500;
+    margin: 0 0 10px 0;
+}
+
+.perfil-info p {
+    color: #666;
+    font-size: 16px;
+    margin: 5px 0;
+    font-weight: 500;
+}
+
+.perfil-info p:first-of-type {
+    color: #006FBF;
+    font-weight: 600;
+}
+
+.perfil-info .rol-badge {
+    display: inline-block;
+    padding: 6px 16px;
+    background: #E6F4FB;
+    color: #006FBF;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 8px;
+}
+
+.perfil-acciones {
+    display: flex;
+    gap: 15px;
+}
+
+/* Formulario de edición */
+.perfil-edicion {
+    background: white;
+    border: 1px solid #727272;
+    border-radius: 5px;
+    padding: 30px;
+}
+
+.perfil-edicion.hidden {
+    display: none;
+}
+
+.perfil-edicion h2 {
+    color: #006FBF;
+    font-size: 22px;
+    font-weight: 500;
+    margin: 0 0 25px 0;
+}
+
+.perfil-edicion h3 {
+    color: #006FBF;
+    font-size: 18px;
+    font-weight: 500;
+    margin: 30px 0 10px 0;
+}
+
+.nota {
+    color: #666;
+    font-size: 14px;
+    font-style: italic;
+    margin: 0 0 20px 0;
+}
+
+.form-section {
+    margin-bottom: 25px;
+}
+
+.form-group-imagen {
+    margin-bottom: 25px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid #727272;
+}
+
+.form-group-imagen label {
+    display: block;
+    color: #333;
+    font-weight: 500;
+    font-size: 14px;
+    margin-bottom: 15px;
+    text-transform: capitalize;
+}
+
+.imagen-edicion {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.imagen-edicion img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #006FBF;
+}
+
+.btn-cambiar-foto {
+    padding: 10px 20px;
+    background: white;
+    color: #006FBF;
+    border: 1px solid #006FBF;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Lato', sans-serif;
+}
+
+.btn-cambiar-foto:hover {
+    background: #006FBF;
+    color: white;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    color: #333;
+    font-weight: 500;
+    font-size: 14px;
+    margin-bottom: 8px;
+    text-transform: capitalize;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #727272;
+    border-radius: 5px;
+    font-size: 14px;
+    font-family: 'Lato', sans-serif;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #006FBF;
+}
+
+.form-group input:disabled {
+    background: #F5F5F5;
+    color: #999;
+    cursor: not-allowed;
+}
+
+.error-message,
+.success-message {
+    display: none;
+    padding: 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.error-message {
+    background-color: #FFE6E6;
+    border: 1px solid #FF9999;
+    color: #CC0000;
+}
+
+.success-message {
+    background-color: #E6F7E6;
+    border: 1px solid #99CC99;
+    color: #006600;
+}
+
+.error-message.show,
+.success-message.show {
+    display: block;
+}
+
+/* Botones */
+.btn-perfil {
+    padding: 12px 24px;
+    background-color: #006FBF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-family: 'Lato', sans-serif;
+    text-transform: capitalize;
+}
+
+.btn-perfil:hover {
+    background-color: #005A9E;
+}
+
+.btn-cancelar {
+    background-color: #727272;
+}
+
+.btn-cancelar:hover {
+    background-color: #5A5A5A;
+}
+
+.btn-cerrar-sesion {
+    background-color: #CC0000;
+}
+
+.btn-cerrar-sesion:hover {
+    background-color: #AA0000;
+}
+
+.form-acciones {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #727272;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .perfil-container {
+        width: 80%;
+    }
+
+    .perfil-header {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .perfil-container {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .perfil-vista,
+    .perfil-edicion {
+        padding: 25px;
+    }
+
+    .perfil-acciones,
+    .form-acciones {
+        flex-direction: column;
+    }
+
+    .btn-perfil {
+        width: 100%;
+    }
+}

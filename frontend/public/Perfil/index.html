@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - Reservas UCC</title>
+    <link rel="stylesheet" href="P-styles/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <main>
+        <div class="res-cont-cont">
+            <div class="res-lkn-cont">
+                <div class="res-prof-cont">
+                    <div class="res-prof-img">
+                        <img id="sidebar-perfil-img" src="../I-img/Assets svg/default-avatar.svg" alt="Perfil">
+                    </div>
+                    <div class="res-prof-lab">
+                        <label id="sidebar-nombre-completo">Cargando...</label>
+                        <label id="sidebar-nombre-usuario">@usuario</label>
+                    </div>
+                </div>
+
+                <h2>Sistema de reservas ucc.</h2>
+                <a href="../index.html">Reservas</a>
+                <a href="../Gestion/index.html">Gestion</a>
+                <a href="../Perfil/index.html">Perfil</a>
+            </div>
+
+            <div class="perfil-container">
+                <h1>Mi Perfil</h1>
+
+                <!-- Vista de perfil -->
+                <div id="perfil-vista" class="perfil-vista">
+                    <div class="perfil-header">
+                        <div class="perfil-img-grande">
+                            <img id="foto-perfil-vista" src="../I-img/Yo.jpg" alt="Foto de perfil">
+                        </div>
+                        <div class="perfil-info">
+                            <h2 id="nombre-vista">Arrieta Herrera, Juan</h2>
+                            <p id="usuario-vista">@juan.arrietah</p>
+                            <p id="email-vista">juan.arrietah@ucc.edu.co</p>
+                            <p class="rol-badge" id="rol-vista">Estudiante</p>
+                        </div>
+                    </div>
+
+                    <div class="perfil-acciones">
+                        <button class="btn-perfil" id="btn-editar">Editar Perfil</button>
+                        <button class="btn-perfil btn-cerrar-sesion" onclick="cerrarSesion()">Cerrar Sesión</button>
+                    </div>
+                </div>
+
+                <!-- Formulario de edición -->
+                <div id="perfil-edicion" class="perfil-edicion hidden">
+                    <form id="form-editar-perfil">
+                        <h2>Editar Información</h2>
+
+                        <div class="form-section">
+                            <div class="form-group-imagen">
+                                <label>Foto de Perfil</label>
+                                <div class="imagen-edicion">
+                                    <img id="foto-perfil-edicion" src="../I-img/Yo.jpg" alt="Foto de perfil">
+                                    <input type="file" id="nueva-imagen" accept="image/*" style="display: none;">
+                                    <button type="button" class="btn-cambiar-foto" onclick="document.getElementById('nueva-imagen').click()">
+                                        Cambiar Foto
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="nombre-completo">Nombre Completo</label>
+                                <input type="text" id="nombre-completo" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="nombre-usuario">Nombre de Usuario</label>
+                                <input type="text" id="nombre-usuario" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Correo Institucional</label>
+                                <input type="email" id="email" disabled>
+                            </div>
+                        </div>
+
+                        <h3>Cambiar Contraseña</h3>
+                        <p class="nota">Deja estos campos vacíos si no deseas cambiar tu contraseña</p>
+
+                        <div class="form-section">
+                            <div class="form-group">
+                                <label for="password-actual">Contraseña Actual</label>
+                                <input type="password" id="password-actual">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="password-nueva">Nueva Contraseña</label>
+                                <input type="password" id="password-nueva" minlength="6">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="password-confirmar">Confirmar Nueva Contraseña</label>
+                                <input type="password" id="password-confirmar" minlength="6">
+                            </div>
+                        </div>
+
+                        <div class="error-message" id="error-message"></div>
+                        <div class="success-message" id="success-message"></div>
+
+                        <div class="form-acciones">
+                            <button type="submit" class="btn-perfil">Guardar Cambios</button>
+                            <button type="button" class="btn-perfil btn-cancelar" id="btn-cancelar">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="../check-auth.js"></script>
+    <script src="perfil.js"></script>
+</body>
+
+</html>

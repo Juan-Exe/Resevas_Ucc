@@ -1,0 +1,180 @@
+/* Estilos para Login - Estética Minimalista Reservas UCC */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Lato', sans-serif;
+    background: #F5F5F5;
+}
+
+.login-container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.login-box {
+    background: white;
+    border: 1px solid #E0E0E0;
+    border-radius: 5px;
+    padding: 50px 60px;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.login-header h1 {
+    font-size: 26px;
+    font-weight: 500;
+    color: #006FBF;
+    margin: 0 0 5px 0;
+    text-transform: capitalize;
+}
+
+.login-header h2 {
+    font-size: 20px;
+    font-weight: 500;
+    color: #333;
+    margin: 0;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    text-transform: capitalize;
+}
+
+.form-group input {
+    padding: 12px;
+    border: 1px solid #727272;
+    border-radius: 5px;
+    font-size: 14px;
+    font-family: 'Lato', sans-serif;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #006FBF;
+}
+
+.form-group-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.form-group-checkbox input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.form-group-checkbox label {
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.error-message {
+    display: none;
+    padding: 12px;
+    background-color: #FFE6E6;
+    border: 1px solid #FF9999;
+    border-radius: 5px;
+    color: #CC0000;
+    font-size: 14px;
+    text-align: center;
+}
+
+.error-message.show {
+    display: block;
+}
+
+.btn-login {
+    padding: 15px;
+    background-color: #006FBF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-family: 'Lato', sans-serif;
+    text-transform: capitalize;
+    margin-top: 10px;
+}
+
+.btn-login:hover {
+    background-color: #005A9E;
+}
+
+.btn-login:active {
+    background-color: #004A82;
+}
+
+.login-footer {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #E0E0E0;
+}
+
+.login-footer p {
+    font-size: 14px;
+    color: #333;
+    margin: 0;
+    font-weight: 500;
+}
+
+.login-footer a {
+    color: #006FBF;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.login-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .login-box {
+        padding: 40px 30px;
+    }
+
+    .login-header h1 {
+        font-size: 22px;
+    }
+
+    .login-header h2 {
+        font-size: 18px;
+    }
+}
