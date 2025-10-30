@@ -22,11 +22,23 @@
 
         try {
             const usuarioData = JSON.parse(usuario);
-            
+
             // Verificar que los datos del usuario sean válidos
             if (!usuarioData.id || !usuarioData.nombre_usuario) {
                 localStorage.removeItem('usuario');
                 window.location.href = '/Login/index.html';
+                return;
+            }
+
+            // Si es administrador y está en la página principal de reservas, redirigir al panel admin
+            if (usuarioData.rol === 'Administrador' && rutaActual === '/index.html') {
+                window.location.href = '/Admin/index.html';
+                return;
+            }
+
+            // Si NO es administrador y está en el panel admin, redirigir a reservas
+            if (usuarioData.rol !== 'Administrador' && rutaActual.includes('/Admin/')) {
+                window.location.href = '/index.html';
                 return;
             }
 

@@ -1,0 +1,26 @@
+// COPIAR ESTE CÓDIGO AL ARCHIVO backend/server.js
+// INSERTARLO ANTES DE LA LÍNEA: app.get('/', (req, res) => {
+
+// ============================================
+// RUTAS DE RECUPERACIÓN DE CONTRASEÑA
+// ============================================
+
+// Función para censurar email
+function censurarEmail(email) {
+    const [usuario, dominio] = email.split('@');
+    const usuarioCensurado = usuario.length > 2
+        ? usuario[0] + '*'.repeat(usuario.length - 2) + usuario[usuario.length - 1]
+        : usuario[0] + '*';
+
+    const partesDominio = dominio.split('.');
+    const dominioCensurado = partesDominio.map((parte, index) => {
+        if (index === partesDominio.length - 1) return parte;
+        return parte.length > 2
+            ? parte[0] + '*'.repeat(parte.length - 2) + parte[parte.length - 1]
+            : parte[0] + '*';
+    }).join('.');
+
+    return `${usuarioCensurado}@${dominioCensurado}`;
+}
+
+// Ver siguiente mensaje para el resto del código...

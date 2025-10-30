@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administrador - Sistema UCC</title>
+    <link rel="stylesheet" href="A-styles/styles.css">
+    <link rel="stylesheet" href="../I-styles/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="res-cont-cont">
+        <!-- Sidebar -->
+        <div class="res-lkn-cont">
+            <div class="res-prof-cont">
+                <img src="../I-img/default-avatar.svg" alt="Foto perfil" id="sidebar-foto" style="width: 50px; height: 50px; border-radius: 50%;">
+                <div class="res-prof-lab">
+                    <h2 id="sidebar-nombre">Administrador</h2>
+                    <label id="sidebar-usuario">admin</label>
+                </div>
+            </div>
+
+            <h2 style="margin-top: 40px; margin-bottom: 5px; font-size: 25px; font-weight: 600;">Sistema De Reservas Ucc.</h2>
+
+            <a href="../Admin/index.html" style="background: #E7F5FF;">Gestión de Reservas</a>
+            <a href="#" id="btn-logout">Cerrar Sesión</a>
+        </div>
+
+        <!-- Contenido Principal -->
+        <div class="res-cont">
+        <div class="admin-header">
+            <h1>Panel de Administrador</h1>
+            <p>Gestión de Solicitudes de Reserva</p>
+        </div>
+
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-number" id="total-pendientes">0</div>
+                <div class="stat-label">Reservas Pendientes</div>
+            </div>
+        </div>
+
+        <div class="reservas-container">
+            <div class="reservas-header">
+                <h2>Solicitudes Pendientes</h2>
+                <button class="btn-refresh" id="btn-refresh">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M21.5 2V8M21.5 8H16M21.5 8L18 4.5C16.7429 3.24286 15.1767 2.34834 13.4601 1.90853C11.7435 1.46871 9.94071 1.50017 8.24071 2.00013C6.54071 2.50009 5.00821 3.45093 3.8097 4.74974C2.61119 6.04854 1.78851 7.64181 1.43 9.36M2.5 22V16M2.5 16H8M2.5 16L6 19.5C7.25714 20.7571 8.82332 21.6517 10.5399 22.0915C12.2565 22.5313 14.0593 22.4998 15.7593 21.9999C17.4593 21.4999 18.9918 20.5491 20.1903 19.2503C21.3888 17.9515 22.2115 16.3582 22.57 14.64" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    Actualizar
+                </button>
+            </div>
+
+            <div class="message-container" id="message-container"></div>
+
+            <div class="reservas-list" id="reservas-list">
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>Cargando reservas...</p>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

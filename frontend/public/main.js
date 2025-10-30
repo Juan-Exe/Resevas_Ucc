@@ -763,13 +763,29 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.target.tagName === 'BUTTON') {
                 e.preventDefault();
 
+                // Obtener el usuario_id del localStorage
+                const usuarioStr = localStorage.getItem('usuario');
+                if (!usuarioStr) {
+                    alert('Por favor, inicie sesión para hacer una reserva.');
+                    window.location.href = '/Login/index.html';
+                    return;
+                }
+
+                const usuario = JSON.parse(usuarioStr);
+
+                // Agregar usuario_id al formState
+                const reservaData = {
+                    ...formState,
+                    usuario_id: usuario.id
+                };
+
                 // Enviar los datos al backend
                 fetch('/api/reservar', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(formState),
+                    body: JSON.stringify(reservaData),
                 })
                 .then(response => response.json())
                 .then(data => {

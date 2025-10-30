@@ -9,7 +9,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const fetchAndDisplayReservas = async () => {
         try {
-            const response = await fetch('/api/todas-las-reservas');
+            // Obtener el usuario del localStorage
+            const usuarioStr = localStorage.getItem('usuario');
+            if (!usuarioStr) {
+                window.location.href = '../Login/index.html';
+                return;
+            }
+
+            const usuario = JSON.parse(usuarioStr);
+
+            const response = await fetch(`/api/todas-las-reservas?usuario_id=${usuario.id}`);
             if (!response.ok) {
                 throw new Error(`La respuesta de la red no fue exitosa (${response.status})`);
             }
@@ -54,13 +63,26 @@ document.addEventListener('DOMContentLoaded', () => {
                         reservaElement.classList.add('res-inf-cont');
                         reservaElement.setAttribute('data-id', reserva.id);
 
+                        // Si está pendiente, agregar clase para deshabilitar
+                        if (reserva.estado === 'pendiente' || !reserva.estado) {
+                            reservaElement.classList.add('reserva-deshabilitada');
+                        }
+
                         const fecha = new Date(reserva.fecha);
                         const mes = fecha.toLocaleDateString('es-ES', { month: 'long', timeZone: 'UTC' });
                         const dia = fecha.getUTCDate();
 
+                        // Determinar el estado y su badge
+                        const estadoBadge = reserva.estado ?
+                            `<span class="estado-badge estado-${reserva.estado}">${
+                                reserva.estado === 'pendiente' ? 'Pendiente' :
+                                reserva.estado === 'aceptada' ? 'Aceptada' :
+                                'Rechazada'
+                            }</span>` : '';
+
                         reservaElement.innerHTML = `
                             <div class="res-aul-mth-day-cont">
-                                <label class="aul">${reserva.nombre_espacio}</label>
+                                <label class="aul">${reserva.nombre_espacio} ${estadoBadge}</label>
                                 <label class="mth">${mes}</label>
                                 <label class="day">${dia}</label>
                             </div>
@@ -68,8 +90,11 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <label>${reserva.hora}</label>
                             </div>
                             <div class="ges-lkn-cont">
-                                <a href="../Edicion/index.html?id=${reserva.id}">Editar</a> - 
-                                <a href="#" class="link-cancelar">Cancelar</a>
+                                ${reserva.estado === 'pendiente' || !reserva.estado ?
+                                    `<span class="texto-pendiente">Esperando aprobación del administrador</span>` :
+                                    reserva.estado === 'aceptada' ?
+                                    `<a href="../Edicion/index.html?id=${reserva.id}">Editar</a> - <a href="#" class="link-cancelar">Cancelar</a>` :
+                                    '<span class="texto-rechazada">Rechazada por el administrador</span>'}
                             </div>
                         `;
                         reservasContainer.appendChild(reservaElement);

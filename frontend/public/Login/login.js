@@ -46,7 +46,13 @@ document.addEventListener('DOMContentLoaded', () => {
             if (response.ok && data.success) {
                 // Login exitoso
                 localStorage.setItem('usuario', JSON.stringify(data.usuario));
-                window.location.href = '../index.html';
+
+                // Redirigir según el rol del usuario
+                if (data.usuario.rol === 'Administrador') {
+                    window.location.href = '../Admin/index.html';
+                } else {
+                    window.location.href = '../index.html';
+                }
             } else {
                 errorMessage.textContent = data.message || 'Error al iniciar sesión. Verifique sus credenciales.';
                 errorMessage.classList.add('show');
@@ -90,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ email_institucional: email })
+                body: JSON.stringify({ correo_institucional: email })
             });
 
             const verificarData = await verificarResponse.json();
@@ -107,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ email_institucional: email })
+                body: JSON.stringify({ usuario_id: verificarData.usuario_id })
             });
 
             const solicitarData = await solicitarResponse.json();

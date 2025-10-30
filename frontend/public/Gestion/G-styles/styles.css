@@ -196,4 +196,61 @@ body {
     width: 50%;
 }
 
+/* Badges de estado de reserva */
+.estado-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-left: 8px;
+}
 
+.estado-pendiente {
+    background: #FFF3E0;
+    color: #F57C00;
+}
+
+.estado-aceptada {
+    background: #E8F5E9;
+    color: #2E7D32;
+}
+
+.estado-rechazada {
+    background: #FFEBEE;
+    color: #C62828;
+}
+
+/* Reserva deshabilitada (pendiente de aprobación) */
+.reserva-deshabilitada {
+    opacity: 0.6;
+    pointer-events: none;
+    background-color: #f5f5f5;
+}
+
+.reserva-deshabilitada .res-aul-mth-day-cont,
+.reserva-deshabilitada .res-hor-cont,
+.reserva-deshabilitada .ges-lkn-cont {
+    color: #727272;
+}
+
+.reserva-deshabilitada .res-aul-mth-day-cont label,
+.reserva-deshabilitada .res-hor-cont label {
+    color: #727272;
+}
+
+.reserva-deshabilitada .estado-badge {
+    background: #e0e0e0;
+    color: #727272;
+}
+
+.texto-pendiente {
+    color: #727272;
+    font-weight: 500;
+    font-style: italic;
+}
+
+.texto-rechazada {
+    color: #C62828;
+    font-weight: 600;
+}
