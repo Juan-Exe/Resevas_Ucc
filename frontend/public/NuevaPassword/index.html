@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nueva Contraseña - Reservas UCC</title>
+    <link rel="stylesheet" href="N-styles/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <main>
+        <div class="nueva-password-container">
+            <div class="nueva-password-box">
+                <div class="nueva-password-header">
+                    <svg width="70" height="70" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 8H17V6C17 3.24 14.76 1 12 1C9.24 1 7 3.24 7 6V8H6C4.9 8 4 8.9 4 10V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V10C20 8.9 19.1 8 18 8ZM12 17C10.9 17 10 16.1 10 15C10 13.9 10.9 13 12 13C13.1 13 14 13.9 14 15C14 16.1 13.1 17 12 17ZM15.1 8H8.9V6C8.9 4.29 10.29 2.9 12 2.9C13.71 2.9 15.1 4.29 15.1 6V8Z" fill="#006FBF"/>
+                    </svg>
+                    <h1>Sistema de reservas UCC</h1>
+                    <h2>Nueva Contraseña</h2>
+                    <p class="subtitle">Crea una contraseña segura para tu cuenta</p>
+                </div>
+
+                <form id="nueva-password-form" class="nueva-password-form">
+                    <div class="form-group">
+                        <label for="nueva-password">Nueva Contraseña</label>
+                        <input
+                            type="password"
+                            id="nueva-password"
+                            name="nueva-password"
+                            placeholder="Mínimo 8 caracteres"
+                            required
+                            minlength="8"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmar-password">Confirmar Contraseña</label>
+                        <input
+                            type="password"
+                            id="confirmar-password"
+                            name="confirmar-password"
+                            placeholder="Repite tu contraseña"
+                            required
+                            minlength="8"
+                        >
+                    </div>
+
+                    <div class="password-requirements">
+                        <p>La contraseña debe tener:</p>
+                        <ul>
+                            <li id="req-length">Al menos 8 caracteres</li>
+                            <li id="req-different">Ser diferente a tu contraseña anterior</li>
+                        </ul>
+                    </div>
+
+                    <div class="error-message" id="error-message"></div>
+                    <div class="success-message" id="success-message"></div>
+
+                    <button type="submit" class="btn-cambiar">Cambiar Contraseña</button>
+                </form>
+            </div>
+        </div>
+    </main>
+    <script src="nueva-password.js"></script>
+</body>
+
+</html>

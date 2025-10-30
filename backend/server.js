@@ -5,9 +5,75 @@ const bcrypt = require('bcrypt');
 const session = require('express-session');
 const multer = require('multer');
 const fs = require('fs');
+const nodemailer = require('nodemailer');
 
 const app = express();
 const port = 3000;
+
+// ============================================
+// CONFIGURACIÓN DE EMAIL DEL SISTEMA
+// ============================================
+// IMPORTANTE: Solo TÚ configuras esto UNA VEZ
+// El sistema enviará códigos a CUALQUIER email del usuario (Gmail, Outlook, Hotmail, etc.)
+// Los usuarios NO necesitan configurar nada, solo reciben el email
+
+const MODO_DESARROLLO = false; // ✅ CONFIGURADO - Emails reales activados
+
+// ============================================
+// OPCIÓN 1: Gmail con contraseña de aplicación - ✅ CONFIGURADA
+// ============================================
+// Contraseña de aplicación de Gmail configurada correctamente
+// El sistema enviará emails REALES a los correos de recuperación de los usuarios
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'juandiegoarrietaherrera@gmail.com',
+        pass: 'abeqvvgvxylvyfta' // Contraseña de aplicación (sin espacios)
+    }
+});
+
+// ============================================
+// OPCIÓN 2: Outlook/Hotmail (MÁS FÁCIL - No necesita contraseña de aplicación)
+// ============================================
+// DESCOMENTA ESTO, comenta la Opción 1 y pon tu contraseña normal:
+/*
+let transporter;
+if (!MODO_DESARROLLO) {
+    transporter = nodemailer.createTransport({
+        service: 'hotmail', // o 'outlook'
+        auth: {
+            user: 'tu-correo@outlook.com',
+            pass: 'tu-contraseña-normal'
+        }
+    });
+}
+*/
+
+// ============================================
+// OPCIÓN 3: Gmail con configuración menos segura (RÁPIDA PARA PRUEBAS)
+// ============================================
+// DESCOMENTA ESTO y comenta la Opción 1:
+/*
+let transporter;
+if (!MODO_DESARROLLO) {
+    transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false,
+        auth: {
+            user: 'juandiegoarrietaherrera@gmail.com',
+            pass: 'tu-contraseña-normal' // Tu contraseña de Gmail
+        },
+        tls: {
+            rejectUnauthorized: false
+        }
+    });
+}
+*/
+
+// Nota: Si usas Opción 3, puede que Gmail bloquee el acceso.
+// En ese caso, ve a: https://myaccount.google.com/lesssecureapps y actívalo
 
 app.use(express.json());
 
@@ -186,6 +252,7 @@ app.post('/api/login', async (req, res) => {
                     nombre_completo: usuario.nombre_completo,
                     nombre_usuario: usuario.nombre_usuario,
                     email: usuario.correo_institucional,
+                    correo_recuperacion: usuario.correo_recuperacion,
                     rol: usuario.rol,
                     imagen_perfil: usuario.imagen_perfil
                 }
@@ -237,7 +304,7 @@ app.get('/api/usuario-actual', (req, res) => {
 // Endpoint para actualizar perfil de usuario
 app.put('/api/actualizar-perfil', upload.single('imagen_perfil'), async (req, res) => {
     try {
-        const { nombre_completo, nombre_usuario, password_actual, password_nueva } = req.body;
+        const { nombre_completo, nombre_usuario, correo_recuperacion, password_actual, password_nueva } = req.body;
         
         // Obtener el usuario de localStorage (desde el cliente)
         // En un sistema real, usaríamos req.session.userId
@@ -284,7 +351,8 @@ app.put('/api/actualizar-perfil', upload.single('imagen_perfil'), async (req, re
             // Preparar datos para actualizar
             let updateData = {
                 nombre_completo,
-                nombre_usuario
+                nombre_usuario,
+                correo_recuperacion: correo_recuperacion || null
             };
 
             // Si hay nueva contraseña, hashearla
@@ -332,6 +400,7 @@ app.put('/api/actualizar-perfil', upload.single('imagen_perfil'), async (req, re
                         nombre_usuario,
                         email: usuario.correo_institucional,
                         rol: usuario.rol,
+                        correo_recuperacion: updateData.correo_recuperacion,
                         imagen_perfil: updateData.imagen_perfil || usuario.imagen_perfil
                     }
                 });
@@ -500,6 +569,366 @@ app.put('/api/reservas/:id', (req, res) => {
         console.log('🟢 Reserva actualizada con éxito. ID:', id);
         res.json({ success: true, message: 'Reserva actualizada con éxito.' });
     });
+});
+
+// ============================================
+// RUTAS DE RECUPERACIÓN DE CONTRASEÑA
+// ============================================
+
+// Función para censurar email
+function censurarEmail(email) {
+    const [usuario, dominio] = email.split('@');
+    const usuarioCensurado = usuario.length > 2
+        ? usuario[0] + '*'.repeat(usuario.length - 2) + usuario[usuario.length - 1]
+        : usuario[0] + '*';
+
+    const partesDominio = dominio.split('.');
+    const dominioCensurado = partesDominio.map((parte, index) => {
+        if (index === partesDominio.length - 1) return parte; // No censurar la extensión (.com, .co, etc.)
+        return parte.length > 2
+            ? parte[0] + '*'.repeat(parte.length - 2) + parte[parte.length - 1]
+            : parte[0] + '*';
+    }).join('.');
+
+    return `${usuarioCensurado}@${dominioCensurado}`;
+}
+
+// Endpoint para verificar si el usuario tiene correo de recuperación
+app.post('/api/recuperar-password/verificar-usuario', (req, res) => {
+    try {
+        const { email_institucional } = req.body;
+
+        console.log('🔍 [VERIFICAR USUARIO] Iniciando verificación para:', email_institucional);
+
+        // Validar email institucional
+        if (!email_institucional || !email_institucional.endsWith('@ucc.edu.co')) {
+            console.log('❌ [VERIFICAR USUARIO] Email no válido');
+            return res.status(400).json({ success: false, message: 'Debe usar un correo institucional válido (@ucc.edu.co)' });
+        }
+
+        // Buscar usuario por correo institucional
+        const query = 'SELECT id, nombre_completo, correo_recuperacion FROM usuarios WHERE correo_institucional = ? AND activo = 1';
+        db.query(query, [email_institucional], (err, results) => {
+            if (err) {
+                console.error('🔴 [VERIFICAR USUARIO] Error al buscar usuario:', err);
+                return res.status(500).json({ success: false, message: 'Error del servidor.' });
+            }
+
+            console.log(`📊 [VERIFICAR USUARIO] Usuarios encontrados: ${results.length}`);
+
+            if (results.length === 0) {
+                console.log('❌ [VERIFICAR USUARIO] No se encontró usuario');
+                return res.status(404).json({ success: false, message: 'No se encontró un usuario con ese correo institucional.' });
+            }
+
+            const usuario = results[0];
+            console.log(`👤 [VERIFICAR USUARIO] Usuario encontrado:`, {
+                id: usuario.id,
+                nombre: usuario.nombre_completo,
+                tiene_correo_recuperacion: !!usuario.correo_recuperacion,
+                correo_recuperacion: usuario.correo_recuperacion || 'NULL'
+            });
+
+            // Verificar que tenga correo de recuperación
+            if (!usuario.correo_recuperacion) {
+                console.log('❌ [VERIFICAR USUARIO] Usuario no tiene correo de recuperación');
+                return res.status(400).json({
+                    success: false,
+                    message: 'No tienes un correo de recuperación registrado. Por favor, agrega uno en tu perfil.'
+                });
+            }
+
+            // Censurar correo de recuperación
+            const correoCensurado = censurarEmail(usuario.correo_recuperacion);
+            console.log(`✅ [VERIFICAR USUARIO] Correo censurado:`, correoCensurado);
+
+            // Usuario existe y tiene correo de recuperación
+            console.log('🟢 [VERIFICAR USUARIO] Usuario verificado con correo de recuperación:', usuario.nombre_completo);
+            res.json({
+                success: true,
+                message: 'Usuario verificado correctamente.',
+                correo_recuperacion_censurado: correoCensurado
+            });
+        });
+    } catch (error) {
+        console.error('🔴 [VERIFICAR USUARIO] Error en verificación de usuario:', error);
+        res.status(500).json({ success: false, message: 'Error del servidor.' });
+    }
+});
+
+// Endpoint para solicitar código de verificación
+app.post('/api/recuperar-password/solicitar', async (req, res) => {
+    try {
+        const { email_institucional } = req.body;
+
+        console.log('📧 [SOLICITAR CÓDIGO] Iniciando solicitud para:', email_institucional);
+
+        // Validar email institucional
+        if (!email_institucional || !email_institucional.endsWith('@ucc.edu.co')) {
+            console.log('❌ [SOLICITAR CÓDIGO] Email no válido');
+            return res.status(400).json({ success: false, message: 'Debe usar un correo institucional válido (@ucc.edu.co)' });
+        }
+
+        // Buscar usuario por correo institucional
+        const query = 'SELECT id, nombre_completo, correo_recuperacion FROM usuarios WHERE correo_institucional = ? AND activo = 1';
+        db.query(query, [email_institucional], async (err, results) => {
+            if (err) {
+                console.error('🔴 [SOLICITAR CÓDIGO] Error al buscar usuario:', err);
+                return res.status(500).json({ success: false, message: 'Error del servidor.' });
+            }
+
+            console.log(`📊 [SOLICITAR CÓDIGO] Usuarios encontrados: ${results.length}`);
+
+            if (results.length === 0) {
+                console.log('❌ [SOLICITAR CÓDIGO] No se encontró usuario');
+                return res.status(404).json({ success: false, message: 'No se encontró un usuario con ese correo institucional.' });
+            }
+
+            const usuario = results[0];
+            console.log(`👤 [SOLICITAR CÓDIGO] Usuario:`, {
+                id: usuario.id,
+                nombre: usuario.nombre_completo,
+                correo_recuperacion: usuario.correo_recuperacion || 'NULL'
+            });
+
+            // Verificar que tenga correo de recuperación
+            if (!usuario.correo_recuperacion) {
+                console.log('❌ [SOLICITAR CÓDIGO] Usuario no tiene correo de recuperación');
+                return res.status(400).json({
+                    success: false,
+                    message: 'Debes agregar un correo de recuperación en tu perfil antes de poder recuperar tu contraseña.'
+                });
+            }
+
+            // Generar código de 6 dígitos
+            const codigo = Math.floor(100000 + Math.random() * 900000).toString();
+            console.log('🔑 [SOLICITAR CÓDIGO] Código generado:', codigo);
+
+            // Calcular fecha de expiración (15 minutos)
+            const fechaExpiracion = new Date();
+            fechaExpiracion.setMinutes(fechaExpiracion.getMinutes() + 15);
+
+            // Guardar código en la base de datos
+            const insertQuery = 'INSERT INTO codigos_verificacion (usuario_id, codigo, email_destino, fecha_expiracion) VALUES (?, ?, ?, ?)';
+            console.log('💾 [SOLICITAR CÓDIGO] Guardando código en BD...');
+            db.query(insertQuery, [usuario.id, codigo, usuario.correo_recuperacion, fechaExpiracion], async (err, result) => {
+                if (err) {
+                    console.error('🔴 [SOLICITAR CÓDIGO] Error al guardar código:', err);
+                    return res.status(500).json({ success: false, message: 'Error al generar el código de verificación.' });
+                }
+
+                console.log('✅ [SOLICITAR CÓDIGO] Código guardado en BD con ID:', result.insertId);
+
+                // Enviar email con el código
+                const mailOptions = {
+                    from: 'Sistema de Reservas UCC <noreply@ucc.edu.co>',
+                    to: usuario.correo_recuperacion,
+                    subject: 'Código de Recuperación de Contraseña - UCC',
+                    html: `
+                        <div style="font-family: 'Lato', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+                            <div style="background-color: #006FBF; padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
+                                <h1 style="color: white; margin: 0; font-size: 24px;">Sistema de Reservas UCC</h1>
+                            </div>
+                            <div style="background-color: #f5f5f5; padding: 40px; border-radius: 0 0 8px 8px;">
+                                <h2 style="color: #333; margin-top: 0;">Hola, ${usuario.nombre_completo}</h2>
+                                <p style="color: #666; font-size: 16px; line-height: 1.6;">
+                                    Recibimos una solicitud para recuperar tu contraseña. Usa el siguiente código de verificación:
+                                </p>
+                                <div style="background-color: white; padding: 20px; text-align: center; border-radius: 8px; margin: 30px 0;">
+                                    <div style="font-size: 36px; font-weight: bold; color: #006FBF; letter-spacing: 8px;">
+                                        ${codigo}
+                                    </div>
+                                </div>
+                                <p style="color: #666; font-size: 14px; line-height: 1.6;">
+                                    Este código expirará en <strong>15 minutos</strong>.
+                                </p>
+                                <p style="color: #666; font-size: 14px; line-height: 1.6;">
+                                    Si no solicitaste este código, puedes ignorar este mensaje.
+                                </p>
+                                <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
+                                <p style="color: #999; font-size: 12px; text-align: center;">
+                                    Universidad Cooperativa de Colombia<br>
+                                    Sistema de Reservas
+                                </p>
+                            </div>
+                        </div>
+                    `
+                };
+
+                try {
+                    if (MODO_DESARROLLO) {
+                        // En modo desarrollo, solo mostrar el código en consola
+                        console.log('═══════════════════════════════════════════════');
+                        console.log('🧪 MODO DESARROLLO - NO SE ENVIÓ EMAIL REAL');
+                        console.log('═══════════════════════════════════════════════');
+                        console.log('👤 Usuario:', usuario.nombre_completo);
+                        console.log('📧 Email destino:', usuario.correo_recuperacion);
+                        console.log('🔑 CÓDIGO DE VERIFICACIÓN:', codigo);
+                        console.log('⏰ Expira en: 15 minutos');
+                        console.log('📅 Fecha expiración:', fechaExpiracion.toLocaleString());
+                        console.log('═══════════════════════════════════════════════');
+                        console.log('✅ [SOLICITAR CÓDIGO] Proceso completado exitosamente');
+                    } else {
+                        // En producción, enviar email real
+                        console.log('📤 [SOLICITAR CÓDIGO] Enviando email a:', usuario.correo_recuperacion);
+                        await transporter.sendMail(mailOptions);
+                        console.log('✅ [SOLICITAR CÓDIGO] Email enviado exitosamente');
+                    }
+
+                    console.log('🟢 [SOLICITAR CÓDIGO] Respuesta enviada al cliente');
+                    res.json({
+                        success: true,
+                        message: 'Código de verificación enviado exitosamente.',
+                        email_destino: usuario.correo_recuperacion
+                    });
+                } catch (emailError) {
+                    console.error('🔴 Error al enviar email:', emailError);
+                    // Eliminar el código si no se pudo enviar el email
+                    db.query('DELETE FROM codigos_verificacion WHERE id = ?', [result.insertId]);
+
+                    res.status(500).json({
+                        success: false,
+                        message: 'Error al enviar el código por email. Por favor, intenta nuevamente.'
+                    });
+                }
+            });
+        });
+    } catch (error) {
+        console.error('🔴 Error en solicitud de recuperación:', error);
+        res.status(500).json({ success: false, message: 'Error del servidor.' });
+    }
+});
+
+// Endpoint para verificar código
+app.post('/api/recuperar-password/verificar-codigo', (req, res) => {
+    try {
+        const { email, codigo } = req.body;
+
+        if (!email || !codigo) {
+            return res.status(400).json({ success: false, message: 'Email y código son requeridos.' });
+        }
+
+        // Buscar usuario
+        const userQuery = 'SELECT id FROM usuarios WHERE correo_institucional = ? AND activo = 1';
+        db.query(userQuery, [email], (err, userResults) => {
+            if (err || userResults.length === 0) {
+                return res.status(404).json({ success: false, message: 'Usuario no encontrado.' });
+            }
+
+            const usuarioId = userResults[0].id;
+
+            // Verificar código
+            const codigoQuery = `
+                SELECT id, fecha_expiracion
+                FROM codigos_verificacion
+                WHERE usuario_id = ? AND codigo = ? AND usado = 0
+                ORDER BY fecha_creacion DESC
+                LIMIT 1
+            `;
+
+            db.query(codigoQuery, [usuarioId, codigo], (err, codigoResults) => {
+                if (err) {
+                    console.error('🔴 Error al verificar código:', err);
+                    return res.status(500).json({ success: false, message: 'Error del servidor.' });
+                }
+
+                if (codigoResults.length === 0) {
+                    return res.status(400).json({ success: false, message: 'Código inválido o ya utilizado.' });
+                }
+
+                const codigoData = codigoResults[0];
+                const ahora = new Date();
+                const fechaExpiracion = new Date(codigoData.fecha_expiracion);
+
+                if (ahora > fechaExpiracion) {
+                    return res.status(400).json({ success: false, message: 'El código ha expirado. Solicita uno nuevo.' });
+                }
+
+                console.log('🟢 Código verificado correctamente para usuario ID:', usuarioId);
+                res.json({ success: true, message: 'Código verificado correctamente.' });
+            });
+        });
+    } catch (error) {
+        console.error('🔴 Error en verificación de código:', error);
+        res.status(500).json({ success: false, message: 'Error del servidor.' });
+    }
+});
+
+// Endpoint para cambiar contraseña
+app.post('/api/recuperar-password/cambiar', async (req, res) => {
+    try {
+        const { email, codigo, nueva_password } = req.body;
+
+        if (!email || !codigo || !nueva_password) {
+            return res.status(400).json({ success: false, message: 'Todos los campos son requeridos.' });
+        }
+
+        if (nueva_password.length < 8) {
+            return res.status(400).json({ success: false, message: 'La contraseña debe tener al menos 8 caracteres.' });
+        }
+
+        // Buscar usuario
+        const userQuery = 'SELECT id, password FROM usuarios WHERE correo_institucional = ? AND activo = 1';
+        db.query(userQuery, [email], async (err, userResults) => {
+            if (err || userResults.length === 0) {
+                return res.status(404).json({ success: false, message: 'Usuario no encontrado.' });
+            }
+
+            const usuario = userResults[0];
+
+            // Verificar que la nueva contraseña no sea igual a la actual
+            const mismaPassword = await bcrypt.compare(nueva_password, usuario.password);
+            if (mismaPassword) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'La nueva contraseña no puede ser igual a la contraseña actual.'
+                });
+            }
+
+            // Verificar código
+            const codigoQuery = `
+                SELECT id
+                FROM codigos_verificacion
+                WHERE usuario_id = ? AND codigo = ? AND usado = 0 AND fecha_expiracion > NOW()
+                ORDER BY fecha_creacion DESC
+                LIMIT 1
+            `;
+
+            db.query(codigoQuery, [usuario.id, codigo], async (err, codigoResults) => {
+                if (err) {
+                    console.error('🔴 Error al verificar código:', err);
+                    return res.status(500).json({ success: false, message: 'Error del servidor.' });
+                }
+
+                if (codigoResults.length === 0) {
+                    return res.status(400).json({ success: false, message: 'Código inválido, expirado o ya utilizado.' });
+                }
+
+                const codigoId = codigoResults[0].id;
+
+                // Hashear nueva contraseña
+                const hashedPassword = await bcrypt.hash(nueva_password, 10);
+
+                // Actualizar contraseña
+                const updateQuery = 'UPDATE usuarios SET password = ? WHERE id = ?';
+                db.query(updateQuery, [hashedPassword, usuario.id], (err, result) => {
+                    if (err) {
+                        console.error('🔴 Error al actualizar contraseña:', err);
+                        return res.status(500).json({ success: false, message: 'Error al cambiar la contraseña.' });
+                    }
+
+                    // Marcar código como usado
+                    db.query('UPDATE codigos_verificacion SET usado = 1 WHERE id = ?', [codigoId]);
+
+                    console.log('🟢 Contraseña cambiada exitosamente para usuario ID:', usuario.id);
+                    res.json({ success: true, message: 'Contraseña cambiada exitosamente.' });
+                });
+            });
+        });
+    } catch (error) {
+        console.error('🔴 Error al cambiar contraseña:', error);
+        res.status(500).json({ success: false, message: 'Error del servidor.' });
+    }
 });
 
 // Ruta principal - Redirige al login

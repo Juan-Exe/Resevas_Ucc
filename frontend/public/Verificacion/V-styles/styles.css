@@ -1,0 +1,250 @@
+/* Estilos para Verificación de Código - Estética Minimalista Reservas UCC */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Lato', sans-serif;
+    background: #F5F5F5;
+}
+
+.verificacion-container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.verificacion-box {
+    background: white;
+    border: 1px solid #E0E0E0;
+    border-radius: 5px;
+    padding: 50px 60px;
+    width: 100%;
+    max-width: 550px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.verificacion-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.verificacion-header svg {
+    margin-bottom: 20px;
+}
+
+.verificacion-header h1 {
+    font-size: 26px;
+    font-weight: 500;
+    color: #006FBF;
+    margin: 0 0 5px 0;
+    text-transform: capitalize;
+}
+
+.verificacion-header h2 {
+    font-size: 20px;
+    font-weight: 500;
+    color: #333;
+    margin: 10px 0 5px 0;
+}
+
+.verificacion-header .subtitle {
+    font-size: 14px;
+    color: #727272;
+    margin: 10px 0 0 0;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+.verificacion-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+/* Inputs de código */
+.codigo-inputs {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.codigo-digit {
+    width: 60px;
+    height: 70px;
+    font-size: 32px;
+    font-weight: 600;
+    text-align: center;
+    border: 2px solid #727272;
+    border-radius: 8px;
+    font-family: 'Lato', sans-serif;
+    transition: all 0.3s ease;
+    color: #333;
+}
+
+.codigo-digit:focus {
+    outline: none;
+    border-color: #006FBF;
+    box-shadow: 0 0 0 3px rgba(0, 111, 191, 0.1);
+}
+
+.codigo-digit.filled {
+    border-color: #006FBF;
+    background-color: #E6F4FB;
+}
+
+.expiracion-info {
+    text-align: center;
+    color: #727272;
+    font-size: 14px;
+    margin: 0;
+}
+
+#tiempo-restante {
+    color: #006FBF;
+    font-weight: 600;
+}
+
+.error-message,
+.success-message {
+    display: none;
+    padding: 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.error-message {
+    background-color: #FFE6E6;
+    border: 1px solid #FF9999;
+    color: #CC0000;
+}
+
+.success-message {
+    background-color: #E6F7E6;
+    border: 1px solid #99CC99;
+    color: #006600;
+}
+
+.error-message.show,
+.success-message.show {
+    display: block;
+}
+
+.btn-verificar {
+    padding: 15px;
+    background-color: #006FBF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-family: 'Lato', sans-serif;
+    text-transform: capitalize;
+    margin-top: 10px;
+}
+
+.btn-verificar:hover {
+    background-color: #005A9E;
+}
+
+.btn-verificar:active {
+    background-color: #004A82;
+}
+
+.btn-verificar:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: #727272;
+}
+
+.reenviar-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.reenviar-container p {
+    color: #333;
+    font-size: 14px;
+    margin: 0;
+    font-weight: 500;
+}
+
+.btn-reenviar {
+    background: none;
+    border: none;
+    color: #006FBF;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 14px;
+    font-family: 'Lato', sans-serif;
+    padding: 0;
+}
+
+.btn-reenviar:hover {
+    color: #005A9E;
+}
+
+.btn-reenviar:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.verificacion-footer {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #E0E0E0;
+}
+
+.verificacion-footer p {
+    font-size: 14px;
+    color: #333;
+    margin: 0;
+    font-weight: 500;
+}
+
+.verificacion-footer a {
+    color: #006FBF;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.verificacion-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .verificacion-box {
+        padding: 40px 30px;
+    }
+
+    .verificacion-header h1 {
+        font-size: 22px;
+    }
+
+    .verificacion-header h2 {
+        font-size: 18px;
+    }
+
+    .codigo-inputs {
+        gap: 8px;
+    }
+
+    .codigo-digit {
+        width: 50px;
+        height: 60px;
+        font-size: 28px;
+    }
+}

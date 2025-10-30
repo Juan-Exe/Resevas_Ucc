@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificar Código - Reservas UCC</title>
+    <link rel="stylesheet" href="V-styles/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <main>
+        <div class="verificacion-container">
+            <div class="verificacion-box">
+                <div class="verificacion-header">
+                    <svg width="70" height="70" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" stroke="#006FBF" stroke-width="2"/>
+                        <path d="M12 8V12L14.5 14.5" stroke="#006FBF" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <h1>Sistema de reservas UCC</h1>
+                    <h2>Verificar Código</h2>
+                    <p class="subtitle">Ingresa el código de 6 dígitos que enviamos a tu correo de recuperación</p>
+                </div>
+
+                <form id="verificacion-form" class="verificacion-form">
+                    <div class="codigo-inputs">
+                        <input type="text" class="codigo-digit" maxlength="1" id="digit-1" autocomplete="off">
+                        <input type="text" class="codigo-digit" maxlength="1" id="digit-2" autocomplete="off">
+                        <input type="text" class="codigo-digit" maxlength="1" id="digit-3" autocomplete="off">
+                        <input type="text" class="codigo-digit" maxlength="1" id="digit-4" autocomplete="off">
+                        <input type="text" class="codigo-digit" maxlength="1" id="digit-5" autocomplete="off">
+                        <input type="text" class="codigo-digit" maxlength="1" id="digit-6" autocomplete="off">
+                    </div>
+
+                    <p class="expiracion-info">El código expira en <span id="tiempo-restante">15:00</span></p>
+
+                    <div class="error-message" id="error-message"></div>
+                    <div class="success-message" id="success-message"></div>
+
+                    <button type="submit" class="btn-verificar">Verificar Código</button>
+
+                    <div class="reenviar-container">
+                        <p>¿No recibiste el código? <button type="button" class="btn-reenviar" id="btn-reenviar">Reenviar código</button></p>
+                    </div>
+
+                    <div class="verificacion-footer">
+                        <p><a href="../Login/index.html">Volver al inicio de sesión</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+    <script src="verificacion.js"></script>
+</body>
+
+</html>

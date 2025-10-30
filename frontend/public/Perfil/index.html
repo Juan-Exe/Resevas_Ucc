@@ -87,6 +87,12 @@
                                 <label for="email">Correo Institucional</label>
                                 <input type="email" id="email" disabled>
                             </div>
+
+                            <div class="form-group">
+                                <label for="correo-recuperacion">Correo de Recuperación (Opcional)</label>
+                                <input type="email" id="correo-recuperacion" placeholder="correo.alternativo@gmail.com">
+                                <small class="form-hint">Este correo se usará para recuperar tu contraseña</small>
+                            </div>
                         </div>
 
                         <h3>Cambiar Contraseña</h3>
@@ -117,6 +123,31 @@
                             <button type="button" class="btn-perfil btn-cancelar" id="btn-cancelar">Cancelar</button>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de recomendación de correo de recuperación -->
+        <div id="modal-recomendacion" class="modal-overlay">
+            <div class="modal-box">
+                <div class="modal-header">
+                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 17H11V15H13V17ZM13 13H11V7H13V13Z" fill="#FF9800"/>
+                    </svg>
+                    <h3>Seguridad de tu Cuenta</h3>
+                </div>
+                <div class="modal-body">
+                    <p>Te recomendamos agregar un <strong>correo de recuperación</strong> para proteger tu cuenta.</p>
+                    <p class="modal-subtitle">Con un correo de recuperación podrás:</p>
+                    <ul>
+                        <li>Recuperar tu contraseña si la olvidas</li>
+                        <li>Mantener tu cuenta segura</li>
+                        <li>Recibir notificaciones importantes</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-modal btn-primary" id="btn-agregar-correo">Agregar Ahora</button>
+                    <button class="btn-modal btn-secondary" id="btn-despues">Recordar Después</button>
                 </div>
             </div>
         </div>

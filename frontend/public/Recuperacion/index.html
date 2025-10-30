@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Contraseña - Reservas UCC</title>
+    <link rel="stylesheet" href="R-styles/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <main>
+        <div class="recuperacion-container">
+            <div class="recuperacion-box">
+                <div class="recuperacion-header">
+                    <h1>Sistema de reservas UCC</h1>
+                    <h2>Recuperar Contraseña</h2>
+                    <p class="subtitle">Ingresa tu correo institucional para recuperar tu contraseña</p>
+                </div>
+
+                <form id="recuperacion-form" class="recuperacion-form">
+                    <!-- Paso 1: Ingresar correo institucional -->
+                    <div id="paso-1" class="paso-activo">
+                        <div class="form-group">
+                            <label for="email">Correo Institucional</label>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="correo@ucc.edu.co"
+                                required
+                            >
+                        </div>
+
+                        <div class="error-message" id="error-message"></div>
+
+                        <button type="button" class="btn-recuperar" id="btn-verificar">Verificar Correo</button>
+                    </div>
+
+                    <!-- Paso 2: Confirmar envío al correo de recuperación -->
+                    <div id="paso-2" class="paso-oculto">
+                        <div class="confirmacion-container">
+                            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 4H4C2.9 4 2.01 4.9 2.01 6L2 18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 8L12 13L4 8V6L12 11L20 6V8Z" fill="#006FBF"/>
+                            </svg>
+                            <h3>Confirma tu correo de recuperación</h3>
+                            <p>Enviaremos un código de verificación a:</p>
+                            <div class="correo-destino">
+                                <strong id="correo-recuperacion-display"></strong>
+                            </div>
+                            <p class="nota-info">Si este correo es incorrecto, actualízalo en tu perfil.</p>
+                        </div>
+
+                        <div class="success-message" id="success-message"></div>
+
+                        <button type="submit" class="btn-recuperar" id="btn-enviar-codigo">Enviar Código de Verificación</button>
+                        <button type="button" class="btn-volver" id="btn-volver">← Cambiar correo</button>
+                    </div>
+
+                    <div class="recuperacion-footer">
+                        <p><a href="../Login/index.html">Volver al inicio de sesión</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal de carga -->
+        <div id="modal-enviando" class="modal">
+            <div class="modal-content">
+                <div class="loader"></div>
+                <h3>Enviando código de verificación</h3>
+                <p id="email-censored">A: ****@****.com</p>
+            </div>
+        </div>
+    </main>
+    <script src="recuperacion.js"></script>
+</body>
+
+</html>

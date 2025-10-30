@@ -9,6 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const errorMessage = document.getElementById('error-message');
     const successMessage = document.getElementById('success-message');
 
+    // Modal de recomendación
+    const modalRecomendacion = document.getElementById('modal-recomendacion');
+    const btnAgregarCorreo = document.getElementById('btn-agregar-correo');
+    const btnDespues = document.getElementById('btn-despues');
+
     let usuarioActual = null;
     let imagenCambiada = false;
 
@@ -19,8 +24,51 @@ document.addEventListener('DOMContentLoaded', () => {
             usuarioActual = JSON.parse(usuarioStr);
             mostrarDatosVista();
             cargarDatosFormulario();
+            verificarCorreoRecuperacion();
         }
     }
+
+    // Verificar si debe mostrar modal de recomendación
+    function verificarCorreoRecuperacion() {
+        // Key única por usuario y sesión
+        const modalKey = `modal_recuperacion_mostrado_${usuarioActual.id}_sesion`;
+        const modalMostrado = sessionStorage.getItem(modalKey);
+        const tieneCorreoRecuperacion = usuarioActual.correo_recuperacion;
+
+        // Mostrar modal una vez por sesión si no tiene correo de recuperación
+        if (!modalMostrado && !tieneCorreoRecuperacion) {
+            setTimeout(() => {
+                modalRecomendacion.classList.add('show');
+            }, 1000); // Esperar 1 segundo después de cargar la página
+        }
+    }
+
+    // Botón "Agregar Ahora" - Abre el modo de edición
+    btnAgregarCorreo.addEventListener('click', () => {
+        modalRecomendacion.classList.remove('show');
+
+        // Marcar como mostrado para esta sesión y este usuario
+        const modalKey = `modal_recuperacion_mostrado_${usuarioActual.id}_sesion`;
+        sessionStorage.setItem(modalKey, 'true');
+
+        // Cambiar a modo edición y enfocar el campo de correo de recuperación
+        perfilVista.classList.add('hidden');
+        perfilEdicion.classList.remove('hidden');
+
+        setTimeout(() => {
+            document.getElementById('correo-recuperacion').focus();
+            document.getElementById('correo-recuperacion').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
+    });
+
+    // Botón "Recordar Después"
+    btnDespues.addEventListener('click', () => {
+        modalRecomendacion.classList.remove('show');
+
+        // Marcar como mostrado para esta sesión y este usuario
+        const modalKey = `modal_recuperacion_mostrado_${usuarioActual.id}_sesion`;
+        sessionStorage.setItem(modalKey, 'true');
+    });
 
     // Mostrar datos en la vista
     function mostrarDatosVista() {
@@ -45,6 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('nombre-completo').value = usuarioActual.nombre_completo;
         document.getElementById('nombre-usuario').value = usuarioActual.nombre_usuario;
         document.getElementById('email').value = usuarioActual.email;
+        document.getElementById('correo-recuperacion').value = usuarioActual.correo_recuperacion || '';
     }
 
     // Cambiar a modo edición
@@ -84,6 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const nombreCompleto = document.getElementById('nombre-completo').value.trim();
         const nombreUsuario = document.getElementById('nombre-usuario').value.trim();
+        const correoRecuperacion = document.getElementById('correo-recuperacion').value.trim();
         const passwordActual = document.getElementById('password-actual').value;
         const passwordNueva = document.getElementById('password-nueva').value;
         const passwordConfirmar = document.getElementById('password-confirmar').value;
@@ -125,7 +175,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const formData = new FormData();
         formData.append('nombre_completo', nombreCompleto);
         formData.append('nombre_usuario', nombreUsuario);
-        
+        formData.append('correo_recuperacion', correoRecuperacion);
+
         // Solo enviar contraseñas si se quiere cambiar
         if (quiereCambiarPassword && passwordActual && passwordNueva) {
             formData.append('password_actual', passwordActual);

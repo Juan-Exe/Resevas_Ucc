@@ -54,10 +54,25 @@
 
                     <button type="submit" class="btn-login">Iniciar Sesión</button>
 
+                    <div class="forgot-password">
+                        <a href="#" id="link-recuperar">¿Olvidaste tu contraseña?</a>
+                    </div>
+
                     <div class="login-footer">
                         <p>¿No tienes cuenta? <a href="../SeleccionRol/index.html">Regístrate aquí</a></p>
                     </div>
                 </form>
+            </div>
+        </div>
+
+        <!-- Modal de envío de código -->
+        <div id="modal-recuperacion" class="modal-overlay">
+            <div class="modal-content">
+                <div class="loader"></div>
+                <h3>Código de verificación enviado</h3>
+                <p>Se ha enviado un código de 6 dígitos a:</p>
+                <p class="email-destino" id="email-destino-modal"></p>
+                <p class="nota-modal">Revisa tu bandeja de entrada y spam</p>
             </div>
         </div>
     </main>

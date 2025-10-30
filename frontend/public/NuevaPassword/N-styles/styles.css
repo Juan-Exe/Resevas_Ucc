@@ -1,0 +1,211 @@
+/* Estilos para Nueva Contraseña - Estética Minimalista Reservas UCC */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Lato', sans-serif;
+    background: #F5F5F5;
+}
+
+.nueva-password-container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.nueva-password-box {
+    background: white;
+    border: 1px solid #E0E0E0;
+    border-radius: 5px;
+    padding: 50px 60px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.nueva-password-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.nueva-password-header svg {
+    margin-bottom: 20px;
+}
+
+.nueva-password-header h1 {
+    font-size: 26px;
+    font-weight: 500;
+    color: #006FBF;
+    margin: 0 0 5px 0;
+    text-transform: capitalize;
+}
+
+.nueva-password-header h2 {
+    font-size: 20px;
+    font-weight: 500;
+    color: #333;
+    margin: 10px 0 5px 0;
+}
+
+.nueva-password-header .subtitle {
+    font-size: 14px;
+    color: #727272;
+    margin: 10px 0 0 0;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+.nueva-password-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    text-transform: capitalize;
+}
+
+.form-group input {
+    padding: 12px;
+    border: 1px solid #727272;
+    border-radius: 5px;
+    font-size: 14px;
+    font-family: 'Lato', sans-serif;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #006FBF;
+}
+
+.password-requirements {
+    background-color: #E6F4FB;
+    border-left: 3px solid #006FBF;
+    padding: 15px 20px;
+    border-radius: 4px;
+    margin: 10px 0;
+}
+
+.password-requirements p {
+    color: #333;
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0 0 10px 0;
+}
+
+.password-requirements ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.password-requirements ul li {
+    color: #666;
+    font-size: 13px;
+    padding: 5px 0 5px 25px;
+    position: relative;
+}
+
+.password-requirements ul li:before {
+    content: "•";
+    position: absolute;
+    left: 10px;
+    color: #006FBF;
+    font-weight: bold;
+}
+
+.password-requirements ul li.valid {
+    color: #00AA00;
+}
+
+.password-requirements ul li.valid:before {
+    content: "✓";
+    color: #00AA00;
+}
+
+.error-message,
+.success-message {
+    display: none;
+    padding: 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.error-message {
+    background-color: #FFE6E6;
+    border: 1px solid #FF9999;
+    color: #CC0000;
+}
+
+.success-message {
+    background-color: #E6F7E6;
+    border: 1px solid #99CC99;
+    color: #006600;
+}
+
+.error-message.show,
+.success-message.show {
+    display: block;
+}
+
+.btn-cambiar {
+    padding: 15px;
+    background-color: #006FBF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-family: 'Lato', sans-serif;
+    text-transform: capitalize;
+    margin-top: 10px;
+}
+
+.btn-cambiar:hover {
+    background-color: #005A9E;
+}
+
+.btn-cambiar:active {
+    background-color: #004A82;
+}
+
+.btn-cambiar:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: #727272;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .nueva-password-box {
+        padding: 40px 30px;
+    }
+
+    .nueva-password-header h1 {
+        font-size: 22px;
+    }
+
+    .nueva-password-header h2 {
+        font-size: 18px;
+    }
+}
