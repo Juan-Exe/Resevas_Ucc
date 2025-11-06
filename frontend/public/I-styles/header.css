@@ -1,0 +1,233 @@
+/* ========================================
+   HEADER INSTITUCIONAL UCC
+   ======================================== */
+
+.header-ucc {
+    width: 100%;
+    background: #FFFFFF;
+    padding: 30px 0 25px 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+    transform: translateY(0);
+}
+
+.header-ucc.header-hidden {
+    transform: translateY(-100%);
+}
+
+/* Efecto decorativo sutil */
+.header-ucc::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100%;
+    background: linear-gradient(90deg, transparent 0%, rgba(0, 169, 206, 0.02) 100%);
+    pointer-events: none;
+}
+
+.header-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+/* Logo UCC */
+.header-logo {
+    flex-shrink: 0;
+    max-width: 280px;
+}
+
+.header-logo img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Mensaje de bienvenida */
+.header-welcome {
+    flex: 1;
+    text-align: center;
+    color: #333;
+    position: relative;
+    z-index: 1;
+}
+
+.header-welcome h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.3;
+    letter-spacing: 0.3px;
+    color: #006FBF;
+}
+
+.header-welcome .welcome-main {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 5px;
+    color: #006FBF;
+}
+
+.header-welcome .welcome-sub {
+    font-size: 18px;
+    font-weight: 400;
+    color: #666;
+    display: block;
+}
+
+/* Elemento decorativo derecho */
+.header-decoration {
+    flex-shrink: 0;
+    width: 280px;
+    height: 60px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.header-decoration::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle, rgba(0, 169, 206, 0.05) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.3;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.15;
+    }
+}
+
+/* Barra decorativa inferior azul turquesa */
+.header-ucc::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: #00A9CE;
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+@media screen and (max-width: 1024px) {
+    .header-content {
+        padding: 0 30px;
+        gap: 20px;
+    }
+
+    .header-logo {
+        max-width: 240px;
+    }
+
+    .header-welcome h1 {
+        font-size: 24px;
+    }
+
+    .header-welcome .welcome-sub {
+        font-size: 16px;
+    }
+
+    .header-decoration {
+        width: 200px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .header-ucc {
+        padding: 15px 0;
+    }
+
+    .header-content {
+        flex-direction: column;
+        padding: 0 20px;
+        gap: 15px;
+    }
+
+    .header-logo {
+        max-width: 220px;
+    }
+
+    .header-welcome {
+        text-align: center;
+    }
+
+    .header-welcome h1 {
+        font-size: 20px;
+    }
+
+    .header-welcome .welcome-sub {
+        font-size: 14px;
+    }
+
+    .header-decoration {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .header-ucc {
+        padding: 12px 0;
+    }
+
+    .header-content {
+        padding: 0 15px;
+        gap: 12px;
+    }
+
+    .header-logo {
+        max-width: 180px;
+    }
+
+    .header-welcome h1 {
+        font-size: 18px;
+    }
+
+    .header-welcome .welcome-sub {
+        font-size: 13px;
+    }
+}
+
+/* ========================================
+   AJUSTES PARA INTEGRACIÓN CON EL LAYOUT EXISTENTE
+   ======================================== */
+
+/* Ajuste del margen superior del contenedor principal */
+body {
+    margin: 0;
+    padding: 0;
+    padding-top: 140px; /* Espacio para el header fijo */
+}
+
+main {
+    margin-top: 0 !important;
+}
+
+/* Espaciado después del header */
+.res-cont-cont {
+    margin-top: 0;
+}
