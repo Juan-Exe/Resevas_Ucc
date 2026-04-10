@@ -121,6 +121,48 @@ Abre **http://localhost:3000** en tu navegador.
 
 ---
 
+## Configurar la recuperación de contraseña
+
+El sistema envía un código de verificación por email cuando un usuario olvida su contraseña. Para que funcione necesitas una **App Password de Gmail**:
+
+1. Activa la **verificación en dos pasos** en tu cuenta Google si no la tienes
+2. Ve a [myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords)
+3. Crea una nueva App Password con el nombre `Reservas UCC`
+4. Copia las **16 letras** que genera Google
+5. Pégalas en tu `.env`:
+   ```env
+   EMAIL_USER=tu_correo@gmail.com
+   EMAIL_PASS=abcd efgh ijkl mnop   ← las 16 letras (sin espacios)
+   ```
+
+> Sin esta configuración el sistema funciona normalmente, pero el botón "Olvidé mi contraseña" dará error al intentar enviar el correo.
+
+Para usarla, el usuario debe haber registrado un **correo de recuperación** en su perfil antes de olvidar la contraseña.
+
+---
+
+## Roles y funcionalidades
+
+### Estudiante / Profesor
+
+- Registrarse con correo `@ucc.edu.co`
+- Hacer reservas de espacios (ver sección abajo)
+- Ver el historial y estado de sus reservas
+- Recibir notificaciones cuando una reserva es aceptada o rechazada
+- Editar su perfil y foto
+- Agregar un correo de recuperación en su perfil
+- Recuperar su contraseña por email si la olvidó
+
+### Administrador
+
+- Ver **todas** las reservas del sistema (pendientes, aceptadas, rechazadas)
+- **Aceptar o rechazar** solicitudes de reserva pendientes
+- Al responder, el usuario recibe una notificación automática
+- Acceder al panel de administración en `/Admin`
+- Gestionar usuarios: ver listado, cambiar roles y desactivar cuentas
+
+---
+
 ## Cómo hacer una reserva
 
 1. Inicia sesión con tu correo institucional `@ucc.edu.co`
@@ -130,6 +172,8 @@ Abre **http://localhost:3000** en tu navegador.
 5. Escribe el **motivo** de la reserva y haz clic en **Reservar**
 6. Tu solicitud queda en estado **Pendiente** hasta que un administrador la apruebe
 7. Recibirás una **notificación** dentro del sistema cuando sea aceptada o rechazada
+
+> Los espacios ya reservados en una franja horaria aparecen bloqueados y no se pueden seleccionar.
 
 ---
 
