@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 30-10-2025 a las 18:30:28
+-- Tiempo de generación: 10-04-2026 a las 02:53:34
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -54,12 +54,7 @@ CREATE TABLE `codigos_verificacion` (
 -- Volcado de datos para la tabla `codigos_verificacion`
 --
 
-INSERT INTO `codigos_verificacion` (`id`, `usuario_id`, `codigo`, `email_destino`, `usado`, `fecha_creacion`, `fecha_expiracion`) VALUES
-(2, 1, '334505', 'juandiegoarrietaherrera@gmail.com', 0, '2025-10-30 07:25:24', '2025-10-30 07:40:24'),
-(3, 1, '157983', 'juandiegoarrietaherrera@gmail.com', 0, '2025-10-30 07:31:13', '2025-10-30 07:46:13'),
-(4, 1, '474728', 'juandiegoarrietaherrera@gmail.com', 1, '2025-10-30 07:54:59', '2025-10-30 08:09:59'),
-(5, 2, '252524', 'juandiegoarrietaherrera@gmail.com', 1, '2025-10-30 07:57:40', '2025-10-30 08:12:40'),
-(6, 1, '282848', 'juandiegoarrietaherrera@gmail.com', 0, '2025-10-30 12:27:49', '2025-10-30 12:42:49');
+-- Sin datos de prueba en codigos_verificacion
 
 -- --------------------------------------------------------
 
@@ -76,6 +71,12 @@ CREATE TABLE `notificaciones` (
   `leida` tinyint(4) DEFAULT 0,
   `fecha_creacion` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `notificaciones`
+--
+
+-- Sin datos de prueba en notificaciones
 
 -- --------------------------------------------------------
 
@@ -148,10 +149,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `nombre_completo`, `nombre_usuario`, `correo_institucional`, `correo_recuperacion`, `rol`, `password`, `imagen_perfil`, `fecha_creacion`, `ultimo_acceso`, `activo`) VALUES
-(1, 'Juan Diego Arrieta', 'Juan.Arrieta', 'juan.arrietah@ucc.edu.co', 'juandiegoarrietaherrera@gmail.com', 'Estudiante', '$2b$10$ja8xSxAGhMzCMfi78QV8T.IMLe5JQsLvwkrdww/.zgl3O2nCEq2Ny', '1761226357240-566130499.jpg', '2025-10-23 13:32:37', '2025-10-30 17:10:44', 1),
-(2, 'Maria Claudia Martinez', 'Mari.Martinez', 'Mari.Martinez@ucc.edu.co', 'juandiegoarrietaherrera@gmail.com', 'Profesor', '$2b$10$jUc1bNSP29wk3vf8VHqsdewHa8eOnlIyLuoLNkc38JJ062p9g3Ou6', 'default-avatar.svg', '2025-10-23 13:56:27', '2025-10-30 13:35:47', 1),
-(3, 'Valentina Ojeda Pascasio', 'Vale.Oje', 'Vale.Oje@ucc.edu.co', NULL, 'Estudiante', '$2b$10$WB7hyNn1RKBUmddRJzpgrekbELvYz2In3k7d5xIgJNNLm4Ayo60K6', 'default-avatar.svg', '2025-10-28 22:44:17', '2025-10-28 22:46:17', 1),
-(4, 'Administrador', 'admin', 'admin@ucc.edu.co', NULL, 'Administrador', '$2b$10$jxeKOsIGhJAftn6Z1Yis0u9/uk3kKtRWm0ePSXXgOqGUgJ5/nKhKu', 'default-avatar.svg', '2025-10-30 13:21:19', '2025-10-30 14:02:59', 1);
+(4, 'Administrador', 'admin', 'admin@ucc.edu.co', NULL, 'Administrador', '$2b$10$hj8abbM9RIWYPx0uRw4hWu8kmmWk4t073wUaewgwdrRVAkANkb/x6', 'default-avatar.svg', '2025-10-30 13:21:19', '2025-11-19 13:46:00', 1);
 
 --
 -- Índices para tablas volcadas
@@ -201,25 +199,25 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `codigos_verificacion`
 --
 ALTER TABLE `codigos_verificacion`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `notificaciones`
 --
 ALTER TABLE `notificaciones`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `reservas`
 --
 ALTER TABLE `reservas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Restricciones para tablas volcadas
