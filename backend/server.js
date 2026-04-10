@@ -1,3 +1,4 @@
+require('dotenv').config({ path: require('path').join(__dirname, '..', '.env') });
 const express = require('express');
 const mysql = require('mysql2');
 const path = require('path');
@@ -15,8 +16,8 @@ const MODO_DESARROLLO = false;
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'juandiegoarrietaherrera@gmail.com',
-        pass: 'abeqvvgvxylvyfta'
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
     }
 });
 
@@ -24,7 +25,7 @@ app.use(express.json());
 
 // Configurar sesiones
 app.use(session({
-    secret: 'reservas-ucc-secret-key-2025',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -663,7 +664,7 @@ app.post('/api/recuperar-password/solicitar', async (req, res) => {
                     });
                 } else {
                     const mailOptions = {
-                        from: 'Sistema de Reservas UCC <juandiegoarrietaherrera@gmail.com>',
+                        from: `Sistema de Reservas UCC <${process.env.EMAIL_USER}>`,
                         to: usuario.correo_recuperacion,
                         subject: 'Código de verificación - Recuperación de contraseña',
                         html: `
